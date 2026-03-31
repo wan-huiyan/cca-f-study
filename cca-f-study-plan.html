@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCA-F Study Plan | Huiyan Wan</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface-2: #232734;
+            --border: #2d3142;
+            --text: #e4e4e7;
+            --text-muted: #9ca3af;
+            --accent: #c084fc;
+            --accent-dim: rgba(192, 132, 252, 0.15);
+            --green: #4ade80;
+            --green-dim: rgba(74, 222, 128, 0.15);
+            --amber: #fbbf24;
+            --amber-dim: rgba(251, 191, 36, 0.15);
+            --blue: #60a5fa;
+            --blue-dim: rgba(96, 165, 250, 0.15);
+            --rose: #fb7185;
+            --rose-dim: rgba(251, 113, 133, 0.15);
+            --cyan: #22d3ee;
+            --cyan-dim: rgba(34, 211, 238, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--blue), var(--cyan));
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .header .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        .header .meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .meta-item {
+            background: var(--bg);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        .meta-item strong { color: var(--accent); }
+
+        /* Exam overview card */
+        .exam-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .exam-stat {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .exam-stat .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .exam-stat .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.3rem;
+        }
+
+        /* Domain bars */
+        .domains-section { margin-bottom: 2rem; }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-title .icon { font-size: 1.2rem; }
+
+        .domain-row {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 0.75rem;
+            display: grid;
+            grid-template-columns: 1fr auto 120px;
+            align-items: center;
+            gap: 1rem;
+        }
+        .domain-name { font-weight: 600; font-size: 0.95rem; }
+        .domain-topics { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
+        .domain-weight {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-align: right;
+        }
+        .domain-bar {
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .domain-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        /* Advantage map */
+        .advantage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .advantage-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+        }
+        .advantage-card .domain-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .advantage-card .level {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .level-strong { background: var(--green-dim); color: var(--green); }
+        .level-moderate { background: var(--amber-dim); color: var(--amber); }
+        .advantage-card .gap-text { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Week cards */
+        .week-section { margin-bottom: 2rem; }
+        .week-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .week-header {
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .week-header h3 { font-size: 1.1rem; font-weight: 600; }
+        .week-tag {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .week-body { padding: 0; }
+        .day-row {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            border-bottom: 1px solid var(--border);
+        }
+        .day-row:last-child { border-bottom: none; }
+        .day-label {
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid var(--border);
+        }
+        .day-content {
+            padding: 1rem 1.5rem;
+        }
+        .day-content .focus {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .day-content .activity {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .day-content .activity a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+        .day-content .activity a:hover { text-decoration: underline; }
+
+        /* Resources */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .resource-group {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .resource-group h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .resource-list { list-style: none; }
+        .resource-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+        .resource-list li:last-child { border-bottom: none; }
+        .resource-list a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+        .resource-list a:hover { text-decoration: underline; }
+        .resource-list .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            font-weight: 600;
+        }
+        .tag-free { background: var(--green-dim); color: var(--green); }
+        .tag-paid { background: var(--rose-dim); color: var(--rose); }
+        .tag-official { background: var(--accent-dim); color: var(--accent); }
+
+        /* Scenarios */
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        .scenario-chip {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .scenario-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Secret weapon callout */
+        .callout {
+            background: var(--accent-dim);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .callout h4 {
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+        .callout ul {
+            list-style: none;
+            padding: 0;
+        }
+        .callout li {
+            padding: 0.3rem 0;
+            font-size: 0.9rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .callout li::before {
+            content: '\2713';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        /* Checkbox tracker */
+        .checklist { list-style: none; padding: 0; }
+        .checklist li {
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .checklist input[type="checkbox"] {
+            accent-color: var(--accent);
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .header h1 { font-size: 1.6rem; }
+            .domain-row { grid-template-columns: 1fr; }
+            .day-row { grid-template-columns: 80px 1fr; }
+            .meta-item { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>CCA-F Study Plan</h1>
+            <p class="subtitle">Claude Certified Architect — Foundations | 4-Week Personalised Plan</p>
+            <div class="meta">
+                <div class="meta-item"><strong>Target:</strong> Q2 2026</div>
+                <div class="meta-item"><strong>Pass Score:</strong> 720 / 1000</div>
+                <div class="meta-item"><strong>Format:</strong> 60 MCQs, 120 min</div>
+                <div class="meta-item"><strong>Prep:</strong> 13 Free Anthropic Academy Courses</div>
+            </div>
+        </div>
+
+        <!-- Exam Stats -->
+        <div class="exam-card">
+            <div class="exam-stat">
+                <div class="value">60</div>
+                <div class="label">Questions</div>
+            </div>
+            <div class="exam-stat">
+                <div class="value">120</div>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="exam-stat">
+                <div class="value">720</div>
+                <div class="label">Pass Score</div>
+            </div>
+            <div class="exam-stat">
+                <div class="value">5</div>
+                <div class="label">Domains</div>
+            </div>
+            <div class="exam-stat">
+                <div class="value">6</div>
+                <div class="label">Scenarios</div>
+            </div>
+            <div class="exam-stat">
+                <div class="value">4</div>
+                <div class="label">Shown per Exam</div>
+            </div>
+        </div>
+
+        <!-- Domain Breakdown -->
+        <div class="domains-section">
+            <div class="section-title"><span class="icon">&#x1F3AF;</span> Exam Domains</div>
+
+            <div class="domain-row">
+                <div>
+                    <div class="domain-name">D1: Agentic Architecture & Orchestration</div>
+                    <div class="domain-topics">Hub-and-spoke, coordinator-subagent, task decomposition, error propagation, parallel execution</div>
+                </div>
+                <div class="domain-weight" style="color: var(--accent);">27%</div>
+                <div class="domain-bar"><div class="domain-bar-fill" style="width: 100%; background: var(--accent);"></div></div>
+            </div>
+
+            <div class="domain-row">
+                <div>
+                    <div class="domain-name">D3: Claude Code Configuration & Workflows</div>
+                    <div class="domain-topics">CLAUDE.md hierarchies, skills frontmatter, slash commands, hooks, allowedTools, CI/CD flags</div>
+                </div>
+                <div class="domain-weight" style="color: var(--blue);">20%</div>
+                <div class="domain-bar"><div class="domain-bar-fill" style="width: 74%; background: var(--blue);"></div></div>
+            </div>
+
+            <div class="domain-row">
+                <div>
+                    <div class="domain-name">D4: Prompt Engineering & Structured Output</div>
+                    <div class="domain-topics">JSON schema enforcement, few-shot techniques, validation retry loops, system prompt design</div>
+                </div>
+                <div class="domain-weight" style="color: var(--amber);">20%</div>
+                <div class="domain-bar"><div class="domain-bar-fill" style="width: 74%; background: var(--amber);"></div></div>
+            </div>
+
+            <div class="domain-row">
+                <div>
+                    <div class="domain-name">D2: Tool Design & MCP Integration</div>
+                    <div class="domain-topics">MCP primitives (tools/resources/prompts), tool boundary design, preventing reasoning overload</div>
+                </div>
+                <div class="domain-weight" style="color: var(--cyan);">18%</div>
+                <div class="domain-bar"><div class="domain-bar-fill" style="width: 67%; background: var(--cyan);"></div></div>
+            </div>
+
+            <div class="domain-row">
+                <div>
+                    <div class="domain-name">D5: Context Management & Reliability</div>
+                    <div class="domain-topics">Context window budgeting, compaction, handoff patterns, confidence calibration, context rot</div>
+                </div>
+                <div class="domain-weight" style="color: var(--green);">15%</div>
+                <div class="domain-bar"><div class="domain-bar-fill" style="width: 56%; background: var(--green);"></div></div>
+            </div>
+        </div>
+
+        <!-- Advantage Map -->
+        <div class="section-title"><span class="icon">&#x1F9ED;</span> Your Advantage Map</div>
+        <div class="advantage-grid">
+            <div class="advantage-card">
+                <div class="domain-label" style="color: var(--accent);">D1: Agentic Architecture (27%)</div>
+                <span class="level level-moderate">Moderate-Strong</span>
+                <div class="gap-text">Built agent-review-panel (original, multi-agent coordinator-subagent). Adapted subagent-driven-development from obra/superpowers (added parallel mode). Downloaded but NOT yet tried: ARIS auto-review-loop, autoresearch. <strong>Gap:</strong> Formalise hub-and-spoke terminology, error propagation patterns. Run the downloaded tools to build hands-on depth.</div>
+            </div>
+            <div class="advantage-card">
+                <div class="domain-label" style="color: var(--cyan);">D2: Tool Design & MCP (18%)</div>
+                <span class="level level-moderate">Moderate</span>
+                <div class="gap-text">Using GCP MCP + Codex MCP as a consumer, but haven't built MCP servers from scratch. <strong>Gap:</strong> Study 3 MCP primitives formally, tool boundary design, building servers in Python.</div>
+            </div>
+            <div class="advantage-card">
+                <div class="domain-label" style="color: var(--blue);">D3: Claude Code Config (20%)</div>
+                <span class="level level-strong">Strong</span>
+                <div class="gap-text">20+ original skills published to GitHub, CLAUDE.md hierarchies, hooks, CI/CD with GitHub Actions. <strong>Gap:</strong> Review slash command internals, frontmatter spec details.</div>
+            </div>
+            <div class="advantage-card">
+                <div class="domain-label" style="color: var(--amber);">D4: Prompt Engineering (20%)</div>
+                <span class="level level-moderate">Moderate</span>
+                <div class="gap-text">Writes skill prompts extensively but may lack formal knowledge of JSON schema enforcement, validation retry loops, few-shot patterns. <strong>Focus area.</strong></div>
+            </div>
+            <div class="advantage-card">
+                <div class="domain-label" style="color: var(--green);">D5: Context Management (15%)</div>
+                <span class="level level-moderate">Moderate</span>
+                <div class="gap-text">Hit context rot in practice but haven't formalised mitigation. Downloaded Plan-Build-Run and context tools but not tried. <strong>Focus area.</strong></div>
+            </div>
+        </div>
+
+        <!-- 6 Scenarios -->
+        <div class="section-title"><span class="icon">&#x1F4CB;</span> 6 Exam Scenarios (4 randomly selected per exam)</div>
+        <div class="scenarios-grid">
+            <div class="scenario-chip">
+                <div class="scenario-num" style="background: var(--accent-dim); color: var(--accent);">1</div>
+                <span>Customer Support Resolution Agent</span>
+            </div>
+            <div class="scenario-chip">
+                <div class="scenario-num" style="background: var(--blue-dim); color: var(--blue);">2</div>
+                <span>Code Generation with Claude Code</span>
+            </div>
+            <div class="scenario-chip">
+                <div class="scenario-num" style="background: var(--cyan-dim); color: var(--cyan);">3</div>
+                <span>Multi-Agent Research System</span>
+            </div>
+            <div class="scenario-chip">
+                <div class="scenario-num" style="background: var(--green-dim); color: var(--green);">4</div>
+                <span>Developer Productivity with Claude</span>
+            </div>
+            <div class="scenario-chip">
+                <div class="scenario-num" style="background: var(--amber-dim); color: var(--amber);">5</div>
+                <span>Claude Code for CI/CD</span>
+            </div>
+            <div class="scenario-chip">
+                <div class="scenario-num" style="background: var(--rose-dim); color: var(--rose);">6</div>
+                <span>Structured Data Extraction</span>
+            </div>
+        </div>
+
+        <!-- Weekly Plan -->
+        <div class="week-section">
+            <div class="section-title"><span class="icon">&#x1F4C5;</span> 4-Week Study Plan</div>
+
+            <!-- Week 1 -->
+            <div class="week-card">
+                <div class="week-header">
+                    <h3>Week 1 — Domains 1 & 3 (47% of exam)</h3>
+                    <span class="week-tag" style="background: var(--accent-dim); color: var(--accent);">Lock in what you know</span>
+                </div>
+                <div class="week-body">
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--accent);">Mon-Tue</div>
+                        <div class="day-content">
+                            <div class="focus">D1: Agentic Architecture (27%)</div>
+                            <div class="activity">Complete <a href="https://anthropic.skilljar.com/">Introduction to Agent Skills</a> course. Study hub-and-spoke, coordinator-subagent patterns, error propagation, task decomposition. Review against your own agent-review-panel implementation.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--blue);">Wed-Thu</div>
+                        <div class="day-content">
+                            <div class="focus">D3: Claude Code Configuration (20%)</div>
+                            <div class="activity">Complete <a href="https://anthropic.skilljar.com/claude-code-in-action">Claude Code in Action</a> course. Study CLAUDE.md hierarchy (global > project > repo), skills frontmatter spec, allowedTools, hook events, CI/CD flags.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--text-muted);">Fri</div>
+                        <div class="day-content">
+                            <div class="focus">Scenario Prep</div>
+                            <div class="activity">Study scenarios: <strong>Code Generation with Claude Code</strong> + <strong>Claude Code for CI/CD</strong> — maps directly to your daily workflow.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="week-card">
+                <div class="week-header">
+                    <h3>Week 2 — Domains 2 & 4 (38% of exam)</h3>
+                    <span class="week-tag" style="background: var(--amber-dim); color: var(--amber);">Fill the gaps</span>
+                </div>
+                <div class="week-body">
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--cyan);">Mon-Tue</div>
+                        <div class="day-content">
+                            <div class="focus">D2: Tool Design & MCP Integration (18%)</div>
+                            <div class="activity">Complete <a href="https://anthropic.skilljar.com/introduction-to-model-context-protocol">Intro to MCP</a> + <a href="https://anthropic.skilljar.com/model-context-protocol-advanced-topics">MCP Advanced Topics</a>. Study 3 MCP primitives (tools, resources, prompts), tool boundary design, preventing reasoning overload with too many tools.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--amber);">Wed-Thu</div>
+                        <div class="day-content">
+                            <div class="focus">D4: Prompt Engineering & Structured Output (20%)</div>
+                            <div class="activity">Complete <a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api">Building with the Claude API</a> (focus on structured output sections). Study JSON schema enforcement, validation retry loops, few-shot prompting, system prompt best practices.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--text-muted);">Fri</div>
+                        <div class="day-content">
+                            <div class="focus">Scenario Prep</div>
+                            <div class="activity">Study scenarios: <strong>Multi-Agent Research System</strong> + <strong>Structured Data Extraction</strong>.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 3 -->
+            <div class="week-card">
+                <div class="week-header">
+                    <h3>Week 3 — Domain 5 + Hands-on (15% + integration)</h3>
+                    <span class="week-tag" style="background: var(--green-dim); color: var(--green);">Close the loop</span>
+                </div>
+                <div class="week-body">
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--green);">Mon</div>
+                        <div class="day-content">
+                            <div class="focus">D5: Context Management & Reliability (15%)</div>
+                            <div class="activity">Study context window budgeting, compaction strategies, handoff patterns, confidence calibration. Read <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Anthropic's context engineering post</a>.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--accent);">Tue-Wed</div>
+                        <div class="day-content">
+                            <div class="focus">Hands-on Integration</div>
+                            <div class="activity">Build a mini project touching all 5 domains: a coordinator agent using MCP tools, structured output, context management across subagents. Use your autoresearch setup as the testbed.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--text-muted);">Thu</div>
+                        <div class="day-content">
+                            <div class="focus">Scenario Prep</div>
+                            <div class="activity">Study final scenarios: <strong>Customer Support Resolution Agent</strong> + <strong>Developer Productivity with Claude</strong>.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--text-muted);">Fri</div>
+                        <div class="day-content">
+                            <div class="focus">Weak-spot Review</div>
+                            <div class="activity">Re-read notes on whatever felt shakiest from Weeks 1-2. Focus on D4 (structured output) and D5 (context management).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Week 4 -->
+            <div class="week-card">
+                <div class="week-header">
+                    <h3>Week 4 — Practice & Polish</h3>
+                    <span class="week-tag" style="background: var(--rose-dim); color: var(--rose);">Exam week</span>
+                </div>
+                <div class="week-body">
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--rose);">Mon-Tue</div>
+                        <div class="day-content">
+                            <div class="focus">Practice Exams</div>
+                            <div class="activity">Complete <a href="https://www.udemy.com/course/new-claude-certified-architect-foundations-cca-f-exams/">Udemy CCA-F Practice Tests</a> and <a href="https://readroo.st/blog/cca-foundations-practice-questions">ReadRoost Practice Questions</a>. Target 80%+ before sitting the real exam.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--amber);">Wed</div>
+                        <div class="day-content">
+                            <div class="focus">Gap Review</div>
+                            <div class="activity">Review any domains where practice scores were below 75%. Re-study those specific topics.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--text-muted);">Thu</div>
+                        <div class="day-content">
+                            <div class="focus">Light Review</div>
+                            <div class="activity">Skim notes only, no new material. Focus on the 6 scenarios and key terminology/patterns.</div>
+                        </div>
+                    </div>
+                    <div class="day-row">
+                        <div class="day-label" style="color: var(--green);">Fri</div>
+                        <div class="day-content">
+                            <div class="focus" style="font-size: 1.1rem;">Exam Day &#x1F3AF;</div>
+                            <div class="activity">You've got this. 60 questions, 120 minutes, 2 min per question. Read each scenario carefully.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secret Weapon -->
+        <div class="callout">
+            <h4>&#x1F50B; Your Secret Weapon — You're Not Starting from Zero</h4>
+            <ul>
+                <li><strong>D1</strong> — You built agent-review-panel (original coordinator-subagent orchestration) and adapted subagent-driven-development with parallel mode</li>
+                <li><strong>D2</strong> — You use GCP MCP + Codex MCP daily as a consumer — the courses will formalise what you already do intuitively</li>
+                <li><strong>D3</strong> — 20+ original skills published to GitHub, advanced .claude/ setup with hooks — more skill-building experience than most candidates</li>
+                <li><strong>D4/D5</strong> — Your weakest domains, but your skill prompt writing experience gives you a head start on structured output patterns</li>
+                <li><strong>Bonus</strong> — ARIS, autoresearch, schliff are installed and ready to try as hands-on study material for D1 and D5</li>
+            </ul>
+        </div>
+
+        <!-- Completion Checklist -->
+        <div class="section-title"><span class="icon">&#x2705;</span> Completion Tracker</div>
+        <div class="resources-grid">
+            <div class="resource-group">
+                <h4>Anthropic Academy Courses</h4>
+                <ul class="checklist">
+                    <li><input type="checkbox"> Claude 101</li>
+                    <li><input type="checkbox"> AI Fluency: Framework & Foundations</li>
+                    <li><input type="checkbox"> Building with the Claude API (8+ hrs)</li>
+                    <li><input type="checkbox"> Claude Code in Action</li>
+                    <li><input type="checkbox"> Introduction to MCP</li>
+                    <li><input type="checkbox"> MCP Advanced Topics</li>
+                    <li><input type="checkbox"> Introduction to Agent Skills</li>
+                </ul>
+            </div>
+            <div class="resource-group">
+                <h4>Scenarios Studied</h4>
+                <ul class="checklist">
+                    <li><input type="checkbox"> Customer Support Resolution Agent</li>
+                    <li><input type="checkbox"> Code Generation with Claude Code</li>
+                    <li><input type="checkbox"> Multi-Agent Research System</li>
+                    <li><input type="checkbox"> Developer Productivity with Claude</li>
+                    <li><input type="checkbox"> Claude Code for CI/CD</li>
+                    <li><input type="checkbox"> Structured Data Extraction</li>
+                </ul>
+            </div>
+            <div class="resource-group">
+                <h4>Practice & Supplementary</h4>
+                <ul class="checklist">
+                    <li><input type="checkbox"> Udemy CCA-F Practice Tests</li>
+                    <li><input type="checkbox"> ReadRoost Practice Questions</li>
+                    <li><input type="checkbox"> Anthropic Context Engineering post</li>
+                    <li><input type="checkbox"> Martin Fowler Harness Engineering</li>
+                    <li><input type="checkbox"> Hands-on integration project</li>
+                    <li><input type="checkbox"> Practice score 80%+ achieved</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Resources -->
+        <div class="section-title"><span class="icon">&#x1F4DA;</span> Study Resources</div>
+        <div class="resources-grid">
+            <div class="resource-group">
+                <h4>&#x1F3DB; Official (Anthropic)</h4>
+                <ul class="resource-list">
+                    <li><a href="https://anthropic.skilljar.com/">Anthropic Academy (Skilljar)</a> <span class="tag tag-free">FREE</span> <span class="tag tag-official">OFFICIAL</span></li>
+                    <li><a href="https://everpath-course-content.s3-accelerate.amazonaws.com/instructor/8lsy243ftffjjy1cx9lm3o2bw/public/1773274827/Claude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf">CCA-F Exam Guide PDF</a> <span class="tag tag-free">FREE</span> <span class="tag tag-official">OFFICIAL</span></li>
+                    <li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Context Engineering for Agents</a> <span class="tag tag-free">FREE</span></li>
+                </ul>
+            </div>
+            <div class="resource-group">
+                <h4>&#x1F4DD; Practice Tests</h4>
+                <ul class="resource-list">
+                    <li><a href="https://www.udemy.com/course/new-claude-certified-architect-foundations-cca-f-exams/">Udemy CCA-F Practice Exams</a> <span class="tag tag-paid">PAID</span></li>
+                    <li><a href="https://readroo.st/blog/cca-foundations-practice-questions">ReadRoost Practice Questions</a> <span class="tag tag-free">FREE</span></li>
+                    <li><a href="https://tutorialsdojo.com/cca-f-claude-certified-architect-foundations-study-guide/">Tutorials Dojo Study Guide</a> <span class="tag tag-free">FREE</span></li>
+                    <li><a href="https://claudecertifications.com/">Claude Certifications (community)</a> <span class="tag tag-free">FREE</span></li>
+                </ul>
+            </div>
+            <div class="resource-group">
+                <h4>&#x1F4D6; Supplementary Reading</h4>
+                <ul class="resource-list">
+                    <li><a href="https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html">Martin Fowler: Harness Engineering</a> <span class="tag tag-free">FREE</span></li>
+                    <li><a href="https://pub.towardsai.net/claude-certified-architect-the-complete-guide-to-passing-the-cca-foundations-exam-9665ce7342a8">Rick Hightower's CCA Guide (Towards AI)</a> <span class="tag tag-free">FREE</span></li>
+                    <li><a href="https://www.newsletter.swirlai.com/p/state-of-context-engineering-in-2026">State of Context Engineering 2026</a> <span class="tag tag-free">FREE</span></li>
+                    <li><a href="https://dynamicbalaji.medium.com/claude-certified-architect-foundations-certification-preparation-guide-c70546b51f51">Balaji's CCA Prep Guide (Medium)</a> <span class="tag tag-free">FREE</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            CCA-F Study Plan generated 2026-03-31 | Goal 3: Personal Development | Huiyan Wan
+        </div>
+    </div>
+</body>
+</html>

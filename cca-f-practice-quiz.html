@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCA-F Practice Quiz | Personalised for Huiyan</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface-2: #232734;
+            --border: #2d3142;
+            --text: #e4e4e7;
+            --text-muted: #9ca3af;
+            --accent: #c084fc;
+            --accent-dim: rgba(192, 132, 252, 0.15);
+            --green: #4ade80;
+            --green-dim: rgba(74, 222, 128, 0.15);
+            --amber: #fbbf24;
+            --amber-dim: rgba(251, 191, 36, 0.15);
+            --blue: #60a5fa;
+            --blue-dim: rgba(96, 165, 250, 0.15);
+            --rose: #fb7185;
+            --rose-dim: rgba(251, 113, 133, 0.15);
+            --cyan: #22d3ee;
+            --cyan-dim: rgba(34, 211, 238, 0.15);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 1.5rem;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--blue), var(--cyan));
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.3rem;
+        }
+        .header .subtitle { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+        .filter-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+        /* Score bar */
+        .score-bar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .score-item { text-align: center; }
+        .score-item .num { font-size: 1.5rem; font-weight: 700; }
+        .score-item .label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .domain-scores { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .domain-score {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Question card */
+        .question-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .question-card.correct { border-color: var(--green); }
+        .question-card.incorrect { border-color: var(--rose); }
+        .question-header {
+            padding: 1.2rem 1.5rem 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .question-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+        .q-tag {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+        .q-num {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+        .scenario-context {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            margin: 0 1.5rem 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        .scenario-context strong { color: var(--text); font-style: normal; }
+        .question-text {
+            padding: 0 1.5rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .options {
+            padding: 0 1.5rem 1rem;
+        }
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.7rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.88rem;
+        }
+        .option:hover:not(.disabled) { border-color: var(--accent); background: var(--accent-dim); }
+        .option.selected { border-color: var(--blue); background: var(--blue-dim); }
+        .option.correct-answer { border-color: var(--green); background: var(--green-dim); }
+        .option.wrong-answer { border-color: var(--rose); background: var(--rose-dim); }
+        .option.disabled { cursor: default; opacity: 0.7; }
+        .option.disabled.correct-answer { opacity: 1; }
+        .option-letter {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+        .explanation {
+            padding: 1rem 1.5rem;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            display: none;
+        }
+        .explanation.show { display: block; }
+        .explanation .exp-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .explanation .personal-note {
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.8rem;
+            background: var(--accent-dim);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            border-left: 3px solid var(--accent);
+        }
+        .explanation .personal-note strong { color: var(--accent); }
+
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { opacity: 0.85; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { border-color: var(--accent); }
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 0.75rem; }
+            .header h1 { font-size: 1.4rem; }
+            .question-header { flex-direction: column; }
+            .score-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>CCA-F Practice Quiz</h1>
+        <p class="subtitle">30 scenario-based questions personalised to your stack | All 5 domains + 6 scenarios</p>
+    </div>
+
+    <div class="controls" id="controls">
+        <button class="filter-btn active" onclick="filterDomain('all')">All (30)</button>
+        <button class="filter-btn" onclick="filterDomain('D1')">D1: Agentic (27%)</button>
+        <button class="filter-btn" onclick="filterDomain('D2')">D2: MCP (18%)</button>
+        <button class="filter-btn" onclick="filterDomain('D3')">D3: Claude Code (20%)</button>
+        <button class="filter-btn" onclick="filterDomain('D4')">D4: Prompt Eng (20%)</button>
+        <button class="filter-btn" onclick="filterDomain('D5')">D5: Context (15%)</button>
+    </div>
+
+    <div class="score-bar" id="scoreBar">
+        <div class="score-item">
+            <div class="num" id="scoreCorrect" style="color: var(--green);">0</div>
+            <div class="label">Correct</div>
+        </div>
+        <div class="score-item">
+            <div class="num" id="scoreWrong" style="color: var(--rose);">0</div>
+            <div class="label">Wrong</div>
+        </div>
+        <div class="score-item">
+            <div class="num" id="scoreRemaining" style="color: var(--text-muted);">30</div>
+            <div class="label">Remaining</div>
+        </div>
+        <div class="score-item">
+            <div class="num" id="scorePercent" style="color: var(--accent);">--%</div>
+            <div class="label">Score</div>
+        </div>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <div class="action-bar">
+        <button class="btn btn-outline" onclick="resetQuiz()">Reset Quiz</button>
+        <button class="btn btn-primary" onclick="saveAttempt()">Save Attempt</button>
+        <button class="btn btn-outline" onclick="revealAll()">Reveal All Answers</button>
+    </div>
+
+    <!-- History Panel -->
+    <div id="historyPanel" style="display:none;">
+        <div class="section-title" style="font-size:1.2rem;margin-bottom:1rem;">&#x1F4C8; Attempt History</div>
+        <div id="historyContent"></div>
+        <div id="domainTrend" style="margin-top:1.5rem;"></div>
+    </div>
+
+    <div class="action-bar">
+        <button class="btn btn-outline" onclick="toggleHistory()">Show/Hide History</button>
+        <button class="btn btn-outline" onclick="exportProgress()">Export Progress JSON</button>
+    </div>
+
+    <div class="footer">
+        CCA-F Practice Quiz | 30 Questions | Generated 2026-03-31 for Huiyan Wan<br>
+        Based on CCA-F Exam Guide domains, weighted by exam percentage<br>
+        Results saved to browser localStorage &mdash; exportable as JSON
+    </div>
+</div>
+
+<script>
+const questions = [
+    // ═══════════════════════════════════════════
+    // D1: AGENTIC ARCHITECTURE (27%) — 8 questions
+    // ═══════════════════════════════════════════
+    {
+        id: 1, domain: "D1", domainName: "Agentic Architecture", weight: "27%",
+        domainColor: "var(--accent)", domainBg: "var(--accent-dim)",
+        scenario: "Multi-Agent Research System",
+        context: "You're building a multi-agent research system similar to your <strong>agent-review-panel</strong>. The coordinator spawns 4 reviewer subagents in parallel, each analysing a codebase from a different perspective (security, performance, maintainability, test coverage).",
+        question: "One subagent encounters a rate limit error from the code analysis API. What information must the error context passed back to the coordinator include?",
+        options: [
+            "Just the error message string so the coordinator can log it",
+            "The failure type, what was attempted, partial results gathered, and potential alternative approaches",
+            "A boolean indicating success/failure, so the coordinator can retry the exact same request",
+            "The full stack trace and raw API response body for debugging"
+        ],
+        correct: 1,
+        explanation: "Production multi-agent error propagation requires four elements: (1) failure type (transient vs permanent), (2) what was attempted, (3) any partial results before failure, and (4) alternative approaches. This lets the coordinator make intelligent decisions — e.g., retry for transient errors, use partial results, or route to a fallback.",
+        personalNote: "In your agent-review-panel, if a reviewer subagent fails mid-analysis, the supreme judge needs to know whether it got partial findings worth incorporating into the verdict, not just 'it failed'."
+    },
+    {
+        id: 2, domain: "D1", domainName: "Agentic Architecture", weight: "27%",
+        domainColor: "var(--accent)", domainBg: "var(--accent-dim)",
+        scenario: "Multi-Agent Research System",
+        context: "Your <strong>subagent-driven-development</strong> skill launches fresh subagents per task. You notice that a coordinator's task decomposition is producing incomplete results — some code changes are missing test coverage.",
+        question: "What is the most likely root cause of incomplete results in a coordinator-subagent system?",
+        options: [
+            "The subagents are running out of context window",
+            "The coordinator's task decomposition logic has coverage gaps between subtasks",
+            "The subagents need access to more tools",
+            "The parallel execution is causing race conditions"
+        ],
+        correct: 1,
+        explanation: "When a coordinator produces incomplete results, the root cause is almost always the coordinator's decomposition logic, not the subagents themselves. Overly narrow task decomposition leads to gaps between subtasks where work falls through the cracks.",
+        personalNote: "This is why your subagent-driven-development has a two-stage review gate after each task — the spec compliance review catches exactly this kind of decomposition gap before moving on."
+    },
+    {
+        id: 3, domain: "D1", domainName: "Agentic Architecture", weight: "27%",
+        domainColor: "var(--accent)", domainBg: "var(--accent-dim)",
+        scenario: "Customer Support Resolution Agent",
+        context: "You're designing a customer support agent with a hub-and-spoke architecture. The central coordinator manages communication between a Knowledge Base Agent, a Ticket History Agent, and a Response Draft Agent.",
+        question: "In a hub-and-spoke architecture, what is the coordinator's role regarding context between subagents?",
+        options: [
+            "Share the full conversation history with all subagents so they have complete context",
+            "Let subagents communicate directly with each other to share findings",
+            "Pass only task-relevant information explicitly to each subagent — they have no memory of coordinator context",
+            "Maintain a shared memory store that all subagents read from and write to"
+        ],
+        correct: 2,
+        explanation: "Context isolation is a critical concept: subagents have NO memory of the coordinator's context. Every piece of information a subagent needs must be passed explicitly in its prompt. This prevents context pollution and keeps each subagent focused on its specific task.",
+        personalNote: "When you launch subagents in agent-review-panel, each reviewer gets only the review brief — they don't see what other reviewers are doing until the debate phase. That's context isolation in action."
+    },
+    {
+        id: 4, domain: "D1", domainName: "Agentic Architecture", weight: "27%",
+        domainColor: "var(--accent)", domainBg: "var(--accent-dim)",
+        scenario: "Developer Productivity with Claude",
+        context: "You want your coordinator to spawn two subagents in parallel — one to analyse test coverage and another to check code style.",
+        question: "How do you enable parallel subagent execution in a Claude Code coordinator?",
+        options: [
+            "Set a 'parallel: true' flag in the coordinator's configuration",
+            "Emit both Task tool calls in a single response message",
+            "Use async/await syntax in the coordinator's prompt",
+            "Create a separate orchestration layer above the coordinator"
+        ],
+        correct: 1,
+        explanation: "Subagents are spawned via the Task tool. To run them in parallel, the coordinator emits multiple Task tool calls in a single response. Additionally, the coordinator's allowedTools must include 'Task' or it cannot spawn subagents at all.",
+        personalNote: "Your subagent-driven-development parallel mode does exactly this — it launches independent tasks via multiple Agent calls in one message, each in its own worktree."
+    },
+    {
+        id: 5, domain: "D1", domainName: "Agentic Architecture", weight: "27%",
+        domainColor: "var(--accent)", domainBg: "var(--accent-dim)",
+        scenario: "Multi-Agent Research System",
+        context: "You're designing an autonomous research loop similar to <strong>ARIS auto-review-loop</strong> where Claude implements fixes and an external LLM reviews iteratively.",
+        question: "In an iterative agent loop, what is the most important mechanism for ensuring the loop terminates?",
+        options: [
+            "A fixed maximum number of iterations with a quality threshold for early exit",
+            "A timeout based on wall-clock time",
+            "Checking if the output hasn't changed between iterations",
+            "Letting the agent decide when it's satisfied with the result"
+        ],
+        correct: 0,
+        explanation: "A fixed MAX_ROUNDS combined with a POSITIVE_THRESHOLD (e.g., score >= 6/10 or verdict contains 'accept') is the standard pattern. This provides a hard ceiling preventing runaway loops while allowing early termination when quality is sufficient. Timeouts are too coarse, output comparison misses quality improvements, and agent self-assessment is unreliable.",
+        personalNote: "Your auto-review-loop skill defines exactly this: MAX_ROUNDS = 4 with POSITIVE_THRESHOLD = score >= 6/10. You haven't run it yet — when you do on Apr 12, observe how the quality score evolves across rounds."
+    },
+    {
+        id: 6, domain: "D1", domainName: "Agentic Architecture", weight: "27%",
+        domainColor: "var(--accent)", domainBg: "var(--accent-dim)",
+        scenario: "Code Generation with Claude Code",
+        context: "A coordinator agent needs to generate code, run tests, and fix any failures iteratively.",
+        question: "Which agentic pattern best describes this workflow?",
+        options: [
+            "Fan-out/fan-in — parallel subtask execution",
+            "Iterative refinement loop — repeated evaluate-modify cycles",
+            "Pipeline — sequential stage processing",
+            "Hierarchical delegation — nested coordinator-subagent layers"
+        ],
+        correct: 1,
+        explanation: "An iterative refinement loop involves repeated cycles of evaluation and modification until a quality threshold is met. This is distinct from fan-out (parallel work), pipelines (sequential stages), and hierarchical delegation (nested management).",
+        personalNote: "This is the same pattern as Karpathy's autoresearch: run experiment -> evaluate metric -> keep or discard -> iterate. The Driveline autoresearch-claude-code you have installed follows this exact pattern."
+    },
+    {
+        id: 7, domain: "D1", domainName: "Agentic Architecture", weight: "27%",
+        domainColor: "var(--accent)", domainBg: "var(--accent-dim)",
+        scenario: "Customer Support Resolution Agent",
+        context: "Your customer support coordinator spawns a Knowledge Base Agent, but the agent's allowedTools config doesn't include 'WebSearch'.",
+        question: "What happens when the Knowledge Base Agent tries to search for information?",
+        options: [
+            "The agent falls back to its training data",
+            "The agent crashes with an unhandled error",
+            "The tool call is silently ignored and the agent proceeds without results",
+            "The agent cannot use the tool — it's blocked by the allowedTools configuration"
+        ],
+        correct: 3,
+        explanation: "The allowedTools configuration acts as a permission boundary. If a tool isn't in the allowed list, the agent simply cannot use it. This is a key harness engineering concept — scoping tool access prevents agents from taking unintended actions.",
+        personalNote: "In your skills, you define allowed-tools in the SKILL.md frontmatter. This is the same principle at the agent architecture level — D1 and D3 overlap here."
+    },
+    {
+        id: 8, domain: "D1", domainName: "Agentic Architecture", weight: "27%",
+        domainColor: "var(--accent)", domainBg: "var(--accent-dim)",
+        scenario: "Multi-Agent Research System",
+        context: "You're building a research system where a coordinator manages a Literature Search Agent, a Data Analysis Agent, and a Synthesis Agent that must run sequentially.",
+        question: "The coordinator dispatches all three agents in a single response. What will happen?",
+        options: [
+            "They execute sequentially in the order specified",
+            "They execute in parallel, causing the Synthesis Agent to fail because it needs outputs from the other two",
+            "The system automatically detects dependencies and sequences them",
+            "Only the first agent executes; the others are queued"
+        ],
+        correct: 1,
+        explanation: "Multiple Task calls in a single response execute in parallel. The system does NOT automatically detect dependencies. If the Synthesis Agent depends on outputs from Literature and Analysis, the coordinator must wait for those to complete before dispatching Synthesis in a subsequent response.",
+        personalNote: "This is why your subagent-driven-development distinguishes between parallel mode (independent tasks) and sequential mode (dependent tasks). The coordinator must understand dependency ordering."
+    },
+
+    // ═══════════════════════════════════════════
+    // D2: TOOL DESIGN & MCP INTEGRATION (18%) — 6 questions
+    // ═══════════════════════════════════════════
+    {
+        id: 9, domain: "D2", domainName: "Tool Design & MCP", weight: "18%",
+        domainColor: "var(--cyan)", domainBg: "var(--cyan-dim)",
+        scenario: "Developer Productivity with Claude",
+        context: "You're using multiple MCP servers: <strong>GCP MCP</strong> for BigQuery/Cloud Run, <strong>Codex MCP</strong> for cross-model review, and considering adding a dbt MCP server.",
+        question: "What are the three core primitives that MCP servers can expose?",
+        options: [
+            "Endpoints, schemas, and authentication methods",
+            "Tools, resources, and prompts",
+            "Functions, data sources, and configurations",
+            "Actions, queries, and subscriptions"
+        ],
+        correct: 1,
+        explanation: "MCP has three core primitives: Tools (executable actions the model can invoke), Resources (data/content the model can read), and Prompts (reusable prompt templates). Understanding this distinction is fundamental to designing effective MCP servers.",
+        personalNote: "Your GCP MCP exposes tools (run_gcloud_command) for executing actions. When you build your own MCP server on Apr 19, think about which of your BQ operations are tools (write/execute) vs resources (read-only data)."
+    },
+    {
+        id: 10, domain: "D2", domainName: "Tool Design & MCP", weight: "18%",
+        domainColor: "var(--cyan)", domainBg: "var(--cyan-dim)",
+        scenario: "Developer Productivity with Claude",
+        context: "You've loaded 15 MCP servers into your Claude Code session, exposing over 200 tools total.",
+        question: "What is the primary risk of exposing too many tools to a model simultaneously?",
+        options: [
+            "The model runs out of memory and crashes",
+            "API rate limits are exceeded faster",
+            "Reasoning overload — the model struggles to select the right tool and makes more errors",
+            "The MCP protocol has a hard limit of 100 tools per session"
+        ],
+        correct: 2,
+        explanation: "Reasoning overload occurs when the model is presented with too many tool options. Research shows a 44% function-calling accuracy improvement on some models when tool loadouts are reduced to only relevant tools. This is a tool boundary design problem — the solution is dynamic tool loading or scoped tool sets per task.",
+        personalNote: "You have dozens of MCP servers and 200+ skills. This is exactly why MCP Tool Search (lazy loading) exists — it reduces context usage by up to 95% by only loading tools when needed."
+    },
+    {
+        id: 11, domain: "D2", domainName: "Tool Design & MCP", weight: "18%",
+        domainColor: "var(--cyan)", domainBg: "var(--cyan-dim)",
+        scenario: "Structured Data Extraction",
+        context: "You're building an MCP server that provides access to BigQuery datasets for a data extraction pipeline.",
+        question: "Which MCP primitive should you use for exposing read-only access to a BQ table's schema and sample rows?",
+        options: [
+            "A Tool — since the model needs to execute a query to get the data",
+            "A Resource — it's read-only data the model can inspect without side effects",
+            "A Prompt — it provides context for the model's task",
+            "All three — Tools for querying, Resources for schema, Prompts for query templates"
+        ],
+        correct: 1,
+        explanation: "Resources are for read-only data without side effects. A table schema and sample rows are informational — the model reads them to understand the data structure. Tools should be reserved for actions that have side effects (executing queries, writing data). Prompts are reusable prompt templates, not data access.",
+        personalNote: "When you build your MCP server on Apr 19, this is the key design decision: your dbt model metadata should be a Resource (read), while 'run a BQ query' should be a Tool (execute)."
+    },
+    {
+        id: 12, domain: "D2", domainName: "Tool Design & MCP", weight: "18%",
+        domainColor: "var(--cyan)", domainBg: "var(--cyan-dim)",
+        scenario: "Code Generation with Claude Code",
+        context: "You're designing an MCP tool that runs shell commands on behalf of the user.",
+        question: "What is the most critical security consideration when designing tools that execute commands?",
+        options: [
+            "Logging all commands for audit purposes",
+            "Rate limiting the number of commands per minute",
+            "Scoping the tool's permissions to prevent destructive or unintended actions",
+            "Encrypting the command output"
+        ],
+        correct: 2,
+        explanation: "Permission scoping is the most critical security consideration. Tools that execute commands must have bounded permissions — restricting which commands can run, which directories are accessible, and blocking destructive operations. This is a core harness engineering principle applied at the tool design level.",
+        personalNote: "Your CLAUDE.md already has rules about never running destructive git commands. The GCP MCP's run_gcloud_command tool has built-in restrictions (no pipes, no command substitution, no SSH). Same principle."
+    },
+    {
+        id: 13, domain: "D2", domainName: "Tool Design & MCP", weight: "18%",
+        domainColor: "var(--cyan)", domainBg: "var(--cyan-dim)",
+        scenario: "Claude Code for CI/CD",
+        context: "Your CI/CD pipeline uses Claude Code with MCP servers for deployment. The pipeline needs to read deployment configs (static data) and trigger deployments (actions).",
+        question: "How should these two capabilities be implemented in MCP?",
+        options: [
+            "Both as Tools — they're both operations the model performs",
+            "Reading configs as a Resource, triggering deployments as a Tool",
+            "Both as Resources — the pipeline handles execution separately",
+            "Reading configs as a Prompt, triggering deployments as a Tool"
+        ],
+        correct: 1,
+        explanation: "Resources expose read-only data (deployment configs), while Tools expose executable actions (trigger deployment). This separation makes the model's capabilities explicit and prevents confusion about which operations have side effects.",
+        personalNote: "Think about your GCP MCP setup: reading project metadata vs triggering a Cloud Run deployment. Same pattern — read = Resource, execute = Tool."
+    },
+    {
+        id: 14, domain: "D2", domainName: "Tool Design & MCP", weight: "18%",
+        domainColor: "var(--cyan)", domainBg: "var(--cyan-dim)",
+        scenario: "Developer Productivity with Claude",
+        context: "You want to add an MCP server to a Claude Code session that's already running.",
+        question: "What happens when you add an MCP server mid-session via 'claude mcp add'?",
+        options: [
+            "The server is immediately available and all its tools are loaded",
+            "The server is added to the configuration but its tools won't be available until the next session",
+            "The server replaces any existing MCP server with the same name",
+            "The server is loaded but requires a manual refresh command to discover its tools"
+        ],
+        correct: 1,
+        explanation: "MCP servers added mid-session via 'claude mcp add' are saved to configuration but cannot be used until a new session starts. This is because the MCP connection handshake happens at session initialisation. You must restart the session to use the new server's tools.",
+        personalNote: "You already have a skill for this! mcp-mid-session-unavailable documents this exact gotcha. It's mentioned in your ARIS install notes too — 'Codex MCP must be loaded at session start'."
+    },
+
+    // ═══════════════════════════════════════════
+    // D3: CLAUDE CODE CONFIG & WORKFLOWS (20%) — 6 questions
+    // ═══════════════════════════════════════════
+    {
+        id: 15, domain: "D3", domainName: "Claude Code Config", weight: "20%",
+        domainColor: "var(--blue)", domainBg: "var(--blue-dim)",
+        scenario: "Code Generation with Claude Code",
+        context: "You have CLAUDE.md files at three levels: <strong>~/.claude/CLAUDE.md</strong> (global), <strong>~/.claude/projects/.../CLAUDE.md</strong> (project), and a <strong>CLAUDE.md</strong> in the repo root.",
+        question: "What is the precedence order when these CLAUDE.md files contain conflicting instructions?",
+        options: [
+            "Global > Project > Repo — global settings always win",
+            "Repo > Project > Global — closest to the code wins",
+            "All three are concatenated and loaded together — there is no precedence, just accumulation",
+            "Project > Global > Repo — project settings are the primary context"
+        ],
+        correct: 2,
+        explanation: "CLAUDE.md files at all levels are concatenated and loaded together into the system prompt. There is no strict precedence — they accumulate. This means conflicting instructions from different levels can create ambiguity, which is why you should design them to be complementary rather than contradictory.",
+        personalNote: "Your global CLAUDE.md has workflow orchestration rules (plan mode, subagents, verification). Your project memories add project-specific context. They layer, not override — which is why you keep general rules global and specific rules in project memory."
+    },
+    {
+        id: 16, domain: "D3", domainName: "Claude Code Config", weight: "20%",
+        domainColor: "var(--blue)", domainBg: "var(--blue-dim)",
+        scenario: "Claude Code for CI/CD",
+        context: "You want to run Claude Code in a CI/CD pipeline with GitHub Actions.",
+        question: "What flag is essential when running Claude Code non-interactively in CI?",
+        options: [
+            "--no-input to suppress all prompts",
+            "--ci to enable CI/CD mode with non-interactive defaults",
+            "-p (print mode) to run a single prompt without interactive session",
+            "--batch to process multiple files simultaneously"
+        ],
+        correct: 2,
+        explanation: "The -p flag (print mode) runs Claude Code with a single prompt and exits, making it suitable for non-interactive CI/CD environments. It processes the prompt, produces output, and terminates without waiting for user input.",
+        personalNote: "The roadmap-pilot tool from your awesome-claude-code scan uses this exact pattern: 'claude -p' loop for auto-pilot mode. And claude-code-action (GitHub Actions) wraps this for PR review workflows."
+    },
+    {
+        id: 17, domain: "D3", domainName: "Claude Code Config", weight: "20%",
+        domainColor: "var(--blue)", domainBg: "var(--blue-dim)",
+        scenario: "Code Generation with Claude Code",
+        context: "You're writing a new Claude Code skill and need to specify which tools the skill can access.",
+        question: "Where do you define a skill's allowed tools?",
+        options: [
+            "In a separate tools.json file in the skill directory",
+            "In the SKILL.md frontmatter using the 'allowed-tools' field",
+            "In the global settings.json under the skill's name",
+            "Tools are inherited from the parent session and can't be scoped per-skill"
+        ],
+        correct: 1,
+        explanation: "Skills define their allowed tools in the SKILL.md frontmatter YAML block using the 'allowed-tools' field. This scopes the skill's capabilities — it can only use tools explicitly listed. This is a security mechanism that prevents skills from accessing tools they don't need.",
+        personalNote: "You do this in every skill you write. For example, your auto-review-loop specifies 'Bash(*), Read, Grep, Glob, Write, Edit, Agent, Skill, mcp__codex__codex, mcp__codex__codex-reply'. This is second nature for you."
+    },
+    {
+        id: 18, domain: "D3", domainName: "Claude Code Config", weight: "20%",
+        domainColor: "var(--blue)", domainBg: "var(--blue-dim)",
+        scenario: "Developer Productivity with Claude",
+        context: "You want to automatically validate Python syntax after every file edit Claude makes.",
+        question: "Which Claude Code hook event should you use?",
+        options: [
+            "PreToolUse — intercept before the Edit tool runs",
+            "PostToolUse — validate after the Edit tool has modified the file",
+            "UserPromptSubmit — check when the user submits their prompt",
+            "SessionStart — set up validation at the beginning of the session"
+        ],
+        correct: 1,
+        explanation: "PostToolUse hooks fire after a tool completes. A PostToolUse hook on the Edit/Write tools can run a syntax checker (e.g., python -m py_compile) on the modified file and report errors back to Claude, allowing it to self-correct. PreToolUse would fire before the edit happens, which is too early for validation.",
+        personalNote: "The claude-code-hooks (yurukusa) from your PR scan has exactly this — a post-edit syntax validator for Python, Shell, JSON, YAML, and JS. You haven't installed it yet but it's in your harness engineering backlog."
+    },
+    {
+        id: 19, domain: "D3", domainName: "Claude Code Config", weight: "20%",
+        domainColor: "var(--blue)", domainBg: "var(--blue-dim)",
+        scenario: "Claude Code for CI/CD",
+        context: "Your team has 5 developers and you want consistent Claude Code behaviour across all their machines.",
+        question: "What is the recommended approach for sharing Claude Code configuration across a team?",
+        options: [
+            "Copy each developer's ~/.claude directory to a shared drive",
+            "Commit a CLAUDE.md and .claude/settings.json to the repository root",
+            "Use environment variables to configure Claude Code identically",
+            "Each developer configures their own setup independently"
+        ],
+        correct: 1,
+        explanation: "Committing CLAUDE.md and .claude/settings.json to the repo root ensures all developers working on that project get the same instructions and configuration. The repo-level CLAUDE.md is automatically loaded alongside personal and project-level configs, providing shared project context.",
+        personalNote: "This is exactly what your claude_code_workflow_guide.html teaches the DS team. Your Goal 2 playbook should cover this pattern."
+    },
+    {
+        id: 20, domain: "D3", domainName: "Claude Code Config", weight: "20%",
+        domainColor: "var(--blue)", domainBg: "var(--blue-dim)",
+        scenario: "Code Generation with Claude Code",
+        context: "A colleague's Claude Code session is running slowly and consuming excessive tokens.",
+        question: "Which of the following is NOT a valid approach to reduce token consumption?",
+        options: [
+            "Using compact prompts in the CLAUDE.md to reduce system prompt size",
+            "Limiting the number of loaded MCP servers to reduce tool descriptions in context",
+            "Setting a max_tokens parameter in CLAUDE.md to cap response length",
+            "Using hooks to suppress verbose command output (quiet overrides)"
+        ],
+        correct: 2,
+        explanation: "CLAUDE.md is for instructions, not API parameters. You cannot set max_tokens or other API parameters in CLAUDE.md. Valid approaches include compact prompts, reducing MCP server count, and using hooks for output suppression.",
+        personalNote: "The claude-warden tool from your scan does option D — quiet overrides that truncate verbose output, saving thousands of tokens per session. Worth installing as part of your harness engineering goal."
+    },
+
+    // ═══════════════════════════════════════════
+    // D4: PROMPT ENGINEERING & STRUCTURED OUTPUT (20%) — 6 questions
+    // ═══════════════════════════════════════════
+    {
+        id: 21, domain: "D4", domainName: "Prompt Engineering", weight: "20%",
+        domainColor: "var(--amber)", domainBg: "var(--amber-dim)",
+        scenario: "Structured Data Extraction",
+        context: "You need Claude to extract campaign metrics from unstructured email text and return them in a specific JSON format.",
+        question: "What is the most reliable way to enforce structured JSON output from Claude?",
+        options: [
+            "Ask Claude nicely in the prompt to return JSON",
+            "Provide a JSON schema in the system prompt and use tool_use with a defined input schema",
+            "Include a regex pattern for validation in the prompt",
+            "Post-process the raw text response with a JSON parser"
+        ],
+        correct: 1,
+        explanation: "The most reliable approach is using tool_use (function calling) with a defined JSON schema. This forces the model to produce output conforming to the schema's structure. System prompt instructions alone are unreliable — the model can drift from the format. Post-processing is a fallback, not a primary mechanism.",
+        personalNote: "Your causal-impact-campaign skill outputs structured results, but uses markdown tables rather than schema-enforced JSON. For the exam, know the tool_use pattern for guaranteed structure."
+    },
+    {
+        id: 22, domain: "D4", domainName: "Prompt Engineering", weight: "20%",
+        domainColor: "var(--amber)", domainBg: "var(--amber-dim)",
+        scenario: "Structured Data Extraction",
+        context: "Claude returns malformed JSON 5% of the time in your data extraction pipeline.",
+        question: "What is the recommended pattern for handling malformed structured output?",
+        options: [
+            "Increase the temperature to zero to eliminate randomness",
+            "Add more examples to the prompt to reduce errors",
+            "Implement a validation-retry loop: validate output against schema, if invalid, pass the error back to Claude with the original request",
+            "Switch to a larger model that makes fewer formatting errors"
+        ],
+        correct: 2,
+        explanation: "A validation-retry loop is the standard production pattern: (1) receive output, (2) validate against schema (e.g., Pydantic), (3) if invalid, send the validation error back to Claude with the original request, (4) repeat up to N times. This is more robust than prompt engineering alone because it provides specific feedback on what went wrong.",
+        personalNote: "This is similar to your auto-review-loop pattern but applied to output validation rather than code quality. Same structure: attempt -> evaluate -> fix -> retry."
+    },
+    {
+        id: 23, domain: "D4", domainName: "Prompt Engineering", weight: "20%",
+        domainColor: "var(--amber)", domainBg: "var(--amber-dim)",
+        scenario: "Customer Support Resolution Agent",
+        context: "You're designing a system prompt for a customer support agent that must never reveal internal pricing logic or competitor information.",
+        question: "Which prompting technique is most effective for constraining model behaviour?",
+        options: [
+            "Add 'DO NOT' instructions at the end of the system prompt",
+            "Use prefilled assistant responses to establish behavioural patterns",
+            "Place critical constraints at both the beginning and end of the system prompt, using explicit boundary framing",
+            "Rely on fine-tuning to remove unwanted knowledge"
+        ],
+        correct: 2,
+        explanation: "Critical constraints should be placed at both the beginning AND end of the system prompt (the 'bookend' technique) because models attend more strongly to content at the edges of their context. Explicit boundary framing ('You MUST never...', 'Under NO circumstances...') combined with positioning maximises compliance.",
+        personalNote: "Your SKILL.md files already do this intuitively — trigger conditions at the top, constraints in the body, and 'Do NOT use for...' exclusions near the bottom. The exam formalises what you already practice."
+    },
+    {
+        id: 24, domain: "D4", domainName: "Prompt Engineering", weight: "20%",
+        domainColor: "var(--amber)", domainBg: "var(--amber-dim)",
+        scenario: "Structured Data Extraction",
+        context: "You need Claude to classify customer feedback into categories: 'positive', 'negative', 'neutral', 'feature_request'.",
+        question: "What prompting technique gives the highest accuracy for classification tasks?",
+        options: [
+            "Zero-shot with clear category definitions",
+            "Few-shot with 2-3 examples per category showing the input-output mapping",
+            "Chain-of-thought prompting asking the model to reason before classifying",
+            "Simply listing the categories and asking the model to pick one"
+        ],
+        correct: 1,
+        explanation: "Few-shot prompting with examples per category is the most reliable technique for classification. The examples establish clear decision boundaries and reduce ambiguity. Chain-of-thought can help with complex cases but adds latency and tokens. Zero-shot works for simple cases but is less reliable for nuanced categories.",
+        personalNote: "When you build structured output for the causal impact product's client-facing reports, few-shot examples of well-formatted report sections will be more reliable than just describing the format."
+    },
+    {
+        id: 25, domain: "D4", domainName: "Prompt Engineering", weight: "20%",
+        domainColor: "var(--amber)", domainBg: "var(--amber-dim)",
+        scenario: "Code Generation with Claude Code",
+        context: "You're building an API that returns Claude's responses with structured metadata.",
+        question: "What is the advantage of using tool_use for structured output compared to asking for JSON in the prompt?",
+        options: [
+            "Tool_use is faster because it skips the natural language generation step",
+            "Tool_use guarantees the output conforms to a defined schema with typed fields",
+            "Tool_use costs fewer tokens because it's more compact",
+            "Tool_use allows streaming of partial results"
+        ],
+        correct: 1,
+        explanation: "Tool_use (function calling) enforces schema compliance at the API level — the model MUST produce output matching the defined schema with correct field names and types. Prompt-based JSON requests have no such guarantee and can produce malformed output, missing fields, or incorrect types.",
+        personalNote: "This is one of the key exam concepts in D4 that differentiates casual prompt users from production architects. Know the difference between 'asking nicely' vs 'enforcing structurally'."
+    },
+    {
+        id: 26, domain: "D4", domainName: "Prompt Engineering", weight: "20%",
+        domainColor: "var(--amber)", domainBg: "var(--amber-dim)",
+        scenario: "Customer Support Resolution Agent",
+        context: "Your support agent sometimes generates overly long responses that overwhelm customers.",
+        question: "Which approach best controls response length without sacrificing quality?",
+        options: [
+            "Set max_tokens to a low value in the API call",
+            "Add 'Be brief' to the system prompt",
+            "Use structured output with a field-level character limit and provide a concise example response",
+            "Post-process responses to truncate them"
+        ],
+        correct: 2,
+        explanation: "Structured output with field constraints (e.g., 'summary: string, max 100 characters') combined with a few-shot example of the desired length gives the model both structural guidance and a calibration target. max_tokens can cut off mid-sentence, 'be brief' is vague, and truncation destroys coherence.",
+        personalNote: "Your client-proposal-slide skill handles this — it generates 3 versions at different detail levels. The structured output pattern is how you'd enforce length in an API context."
+    },
+
+    // ═══════════════════════════════════════════
+    // D5: CONTEXT MANAGEMENT & RELIABILITY (15%) — 4 questions
+    // ═══════════════════════════════════════════
+    {
+        id: 27, domain: "D5", domainName: "Context Management", weight: "15%",
+        domainColor: "var(--green)", domainBg: "var(--green-dim)",
+        scenario: "Multi-Agent Research System",
+        context: "Your overnight autoresearch loop runs for 20+ iterations. By iteration 15, the model starts repeating earlier experiments and forgetting what was already tried.",
+        question: "What is this phenomenon called, and what is the recommended mitigation?",
+        options: [
+            "Hallucination — increase temperature to introduce more randomness",
+            "Context rot — implement compaction by summarising older context and preserving recent high-signal turns",
+            "Token exhaustion — switch to a model with a larger context window",
+            "Attention drift — add 'remember all previous experiments' to the prompt"
+        ],
+        correct: 1,
+        explanation: "Context rot occurs when the model's recall degrades as the context window fills up, due to transformer attention budget depletion. The solution is compaction: summarise older conversation turns while preserving recent turns raw (to maintain format rhythm). Critical: never compress error traces, as the model may repeat failed approaches.",
+        personalNote: "This will likely happen during your Apr 12 autoresearch session. Watch for it around iteration 10-15. Plan-Build-Run (from your scan) solves this by keeping the orchestrator at ~15% context via structured subagent delegation."
+    },
+    {
+        id: 28, domain: "D5", domainName: "Context Management", weight: "15%",
+        domainColor: "var(--green)", domainBg: "var(--green-dim)",
+        scenario: "Developer Productivity with Claude",
+        context: "You're designing a long-running agent that needs to track which files it has modified, what tests have passed, and what decisions it has made across a multi-hour session.",
+        question: "What is the recommended approach for maintaining state across a long session?",
+        options: [
+            "Rely on the conversation history — the model will remember everything",
+            "Use structured note-taking: have the agent maintain an external state file that it reads and updates at each step",
+            "Periodically remind the model of previous actions via system prompt injection",
+            "Keep sessions short and use session restore to continue"
+        ],
+        correct: 1,
+        explanation: "Structured note-taking is the recommended pattern: the agent maintains an external file (e.g., PROGRESS.md, STATE.json) that it reads at the start of each step and updates after. This provides reliable state that doesn't degrade with context length, unlike conversation history which suffers from context rot.",
+        personalNote: "Your auto-review-loop already does this with REVIEW_STATE.json for crash recovery. Your MEMORY.md system is the same pattern at the session level. The exam tests whether you understand WHY external state is needed (context rot) not just HOW."
+    },
+    {
+        id: 29, domain: "D5", domainName: "Context Management", weight: "15%",
+        domainColor: "var(--green)", domainBg: "var(--green-dim)",
+        scenario: "Multi-Agent Research System",
+        context: "You need to hand off a complex research task from one agent session to another (e.g., overnight run completes and morning session needs to continue).",
+        question: "What should a well-designed handoff document include?",
+        options: [
+            "The full conversation history from the previous session",
+            "A summary of completed work, pending tasks, key decisions made, and any blockers encountered",
+            "Just the final output — the new session doesn't need process details",
+            "A link to the previous session's log file"
+        ],
+        correct: 1,
+        explanation: "An effective handoff document includes: (1) what was completed, (2) what remains, (3) key decisions and their rationale, and (4) blockers or issues. Full conversation history is too large and suffers from context rot. Final output alone loses critical process context. Log files are unstructured.",
+        personalNote: "Your session-handoff-consolidator skill does exactly this — consolidates multiple handoff documents into a prioritised plan. The exam tests the principle; you've already built the tool."
+    },
+    {
+        id: 30, domain: "D5", domainName: "Context Management", weight: "15%",
+        domainColor: "var(--green)", domainBg: "var(--green-dim)",
+        scenario: "Claude Code for CI/CD",
+        context: "Your CI pipeline runs Claude Code to analyse PRs. Some PRs have 50+ changed files, causing the context window to fill up.",
+        question: "What is the guiding principle for context engineering according to Anthropic?",
+        options: [
+            "Always use the maximum context window available to give the model complete information",
+            "The smallest set of high-signal tokens that maximise the likelihood of the desired outcome",
+            "Prioritise recency — recent context is always more important than older context",
+            "Use embeddings to compress all context into a fixed-size representation"
+        ],
+        correct: 1,
+        explanation: "Anthropic's guiding principle: 'the smallest set of high-signal tokens that maximise the likelihood of your desired outcome.' Every token must justify its presence. For large PRs, this means selective file loading (changed files most relevant to the review focus), not dumping everything into context.",
+        personalNote: "This principle applies to your skill design too — your SKILL.md files should contain only what the model needs, nothing more. The schliff efficiency dimension measures exactly this."
+    }
+];
+
+// ═══════════════════════════════════════════
+// STATE & STORAGE
+// ═══════════════════════════════════════════
+const STORAGE_KEY = 'ccaf-quiz-history';
+let answered = {};
+let currentFilter = 'all';
+
+function getHistory() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e) { return []; }
+}
+function saveHistory(history) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+}
+
+// ═══════════════════════════════════════════
+// SCORING HELPERS
+// ═══════════════════════════════════════════
+function computeScores(answeredMap) {
+    const domains = ['D1','D2','D3','D4','D5'];
+    const domainScores = {};
+    let totalCorrect = 0, totalAnswered = 0, totalWrong = 0;
+
+    domains.forEach(d => { domainScores[d] = { correct: 0, total: 0 }; });
+
+    Object.entries(answeredMap).forEach(([qId, ans]) => {
+        if (ans === -1) return; // revealed, not answered
+        const q = questions.find(q => q.id === parseInt(qId));
+        if (!q) return;
+        totalAnswered++;
+        domainScores[q.domain].total++;
+        if (ans === q.correct) {
+            totalCorrect++;
+            domainScores[q.domain].correct++;
+        } else {
+            totalWrong++;
+        }
+    });
+
+    const wrongQuestions = [];
+    Object.entries(answeredMap).forEach(([qId, ans]) => {
+        if (ans === -1) return;
+        const q = questions.find(q => q.id === parseInt(qId));
+        if (q && ans !== q.correct) {
+            wrongQuestions.push({ id: q.id, domain: q.domain, question: q.question.substring(0,80)+'...' });
+        }
+    });
+
+    return {
+        totalCorrect, totalWrong, totalAnswered,
+        percent: totalAnswered > 0 ? Math.round(totalCorrect / totalAnswered * 100) : 0,
+        domainScores, wrongQuestions
+    };
+}
+
+// ═══════════════════════════════════════════
+// SAVE ATTEMPT
+// ═══════════════════════════════════════════
+function saveAttempt() {
+    const realAnswers = Object.fromEntries(
+        Object.entries(answered).filter(([k,v]) => v !== -1)
+    );
+    if (Object.keys(realAnswers).length === 0) {
+        alert('Answer at least one question before saving!');
+        return;
+    }
+
+    const scores = computeScores(realAnswers);
+    const history = getHistory();
+    const attempt = {
+        id: history.length + 1,
+        date: new Date().toISOString(),
+        dateFormatted: new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }),
+        questionsAnswered: scores.totalAnswered,
+        correct: scores.totalCorrect,
+        wrong: scores.totalWrong,
+        percent: scores.percent,
+        domainScores: scores.domainScores,
+        wrongQuestions: scores.wrongQuestions,
+        label: history.length === 0 ? 'Baseline (pre-study)' : `Attempt ${history.length + 1}`
+    };
+
+    history.push(attempt);
+    saveHistory(history);
+
+    // Visual feedback
+    const btn = document.querySelector('.btn-primary');
+    const origText = btn.textContent;
+    btn.textContent = 'Saved!';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => { btn.textContent = origText; btn.style.background = 'var(--accent)'; }, 2000);
+
+    // Show history
+    document.getElementById('historyPanel').style.display = 'block';
+    renderHistory();
+}
+
+// ═══════════════════════════════════════════
+// RENDER HISTORY
+// ═══════════════════════════════════════════
+function renderHistory() {
+    const history = getHistory();
+    const container = document.getElementById('historyContent');
+    if (history.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;">No attempts saved yet. Take the quiz and click "Save Attempt"!</p>';
+        return;
+    }
+
+    // Attempts table
+    let html = `<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+        <thead><tr style="border-bottom:2px solid var(--border);text-align:left;">
+            <th style="padding:0.6rem;">Attempt</th>
+            <th style="padding:0.6rem;">Date</th>
+            <th style="padding:0.6rem;">Answered</th>
+            <th style="padding:0.6rem;">Score</th>
+            <th style="padding:0.6rem;">D1</th>
+            <th style="padding:0.6rem;">D2</th>
+            <th style="padding:0.6rem;">D3</th>
+            <th style="padding:0.6rem;">D4</th>
+            <th style="padding:0.6rem;">D5</th>
+        </tr></thead><tbody>`;
+
+    history.forEach(a => {
+        const pctColor = a.percent >= 80 ? 'var(--green)' : a.percent >= 60 ? 'var(--amber)' : 'var(--rose)';
+        const domainPct = (d) => {
+            const ds = a.domainScores[d];
+            if (!ds || ds.total === 0) return '<span style="color:var(--text-muted);">-</span>';
+            const p = Math.round(ds.correct / ds.total * 100);
+            const c = p >= 80 ? 'var(--green)' : p >= 60 ? 'var(--amber)' : 'var(--rose)';
+            return `<span style="color:${c};font-weight:600;">${p}%</span><span style="color:var(--text-muted);font-size:0.7rem;"> (${ds.correct}/${ds.total})</span>`;
+        };
+
+        html += `<tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:0.6rem;font-weight:600;">${a.label}</td>
+            <td style="padding:0.6rem;color:var(--text-muted);">${a.dateFormatted}</td>
+            <td style="padding:0.6rem;">${a.questionsAnswered}/30</td>
+            <td style="padding:0.6rem;"><span style="color:${pctColor};font-weight:700;font-size:1rem;">${a.percent}%</span></td>
+            <td style="padding:0.6rem;">${domainPct('D1')}</td>
+            <td style="padding:0.6rem;">${domainPct('D2')}</td>
+            <td style="padding:0.6rem;">${domainPct('D3')}</td>
+            <td style="padding:0.6rem;">${domainPct('D4')}</td>
+            <td style="padding:0.6rem;">${domainPct('D5')}</td>
+        </tr>`;
+    });
+    html += '</tbody></table></div>';
+
+    // Improvement indicator
+    if (history.length >= 2) {
+        const first = history[0];
+        const last = history[history.length - 1];
+        const delta = last.percent - first.percent;
+        const deltaColor = delta > 0 ? 'var(--green)' : delta < 0 ? 'var(--rose)' : 'var(--text-muted)';
+        const deltaIcon = delta > 0 ? '&#9650;' : delta < 0 ? '&#9660;' : '&#9644;';
+        html += `<div style="margin-top:1rem;padding:0.8rem 1rem;background:var(--surface-2);border-radius:8px;font-size:0.85rem;">
+            <strong>Progress:</strong> <span style="color:${deltaColor};font-weight:700;">${deltaIcon} ${delta > 0 ? '+' : ''}${delta}%</span> from baseline to latest attempt
+        </div>`;
+    }
+
+    // Weak spots from latest attempt
+    const latest = history[history.length - 1];
+    if (latest.wrongQuestions && latest.wrongQuestions.length > 0) {
+        html += `<div style="margin-top:1rem;padding:1rem;background:var(--rose-dim);border-radius:8px;border:1px solid rgba(251,113,133,0.3);">
+            <strong style="color:var(--rose);">Weak spots (latest attempt):</strong>
+            <ul style="margin-top:0.5rem;padding-left:1.2rem;font-size:0.8rem;">`;
+        latest.wrongQuestions.forEach(wq => {
+            html += `<li style="margin-bottom:0.3rem;"><span style="color:var(--text-muted);">[${wq.domain}]</span> Q${wq.id}: ${wq.question}</li>`;
+        });
+        html += '</ul></div>';
+    }
+
+    // Study plan recommendations
+    const weakDomains = [];
+    ['D1','D2','D3','D4','D5'].forEach(d => {
+        const ds = latest.domainScores[d];
+        if (ds && ds.total > 0 && (ds.correct / ds.total) < 0.75) {
+            weakDomains.push(d);
+        }
+    });
+    if (weakDomains.length > 0) {
+        const domainNames = { D1:'Agentic Architecture', D2:'Tool Design & MCP', D3:'Claude Code Config', D4:'Prompt Engineering', D5:'Context Management' };
+        html += `<div style="margin-top:1rem;padding:1rem;background:var(--amber-dim);border-radius:8px;border:1px solid rgba(251,191,36,0.3);">
+            <strong style="color:var(--amber);">Study plan focus:</strong>
+            <span style="font-size:0.85rem;"> Prioritise these domains in your next study session:</span>
+            <ul style="margin-top:0.5rem;padding-left:1.2rem;font-size:0.85rem;">`;
+        weakDomains.forEach(d => {
+            html += `<li><strong>${d}: ${domainNames[d]}</strong> (below 75%)</li>`;
+        });
+        html += '</ul></div>';
+    }
+
+    container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+// EXPORT & UTILITY
+// ═══════════════════════════════════════════
+function exportProgress() {
+    const history = getHistory();
+    if (history.length === 0) { alert('No attempts to export yet!'); return; }
+
+    const exportData = {
+        exportDate: new Date().toISOString(),
+        examTarget: 'CCA-F (Claude Certified Architect — Foundations)',
+        candidate: 'Huiyan Wan',
+        totalAttempts: history.length,
+        latestScore: history[history.length - 1].percent + '%',
+        baselineScore: history[0].percent + '%',
+        improvement: (history[history.length - 1].percent - history[0].percent) + '%',
+        attempts: history
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ccaf-progress-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function toggleHistory() {
+    const panel = document.getElementById('historyPanel');
+    if (panel.style.display === 'none') {
+        panel.style.display = 'block';
+        renderHistory();
+    } else {
+        panel.style.display = 'none';
+    }
+}
+
+// ═══════════════════════════════════════════
+// RENDER QUESTIONS
+// ═══════════════════════════════════════════
+function renderQuestions() {
+    const container = document.getElementById('questionsContainer');
+    container.innerHTML = '';
+    const filtered = currentFilter === 'all' ? questions : questions.filter(q => q.domain === currentFilter);
+
+    filtered.forEach(q => {
+        const card = document.createElement('div');
+        card.className = `question-card ${answered[q.id] !== undefined ? (answered[q.id] === q.correct ? 'correct' : 'incorrect') : ''}`;
+        card.id = `q-${q.id}`;
+
+        const letters = ['A', 'B', 'C', 'D'];
+        const optionsHtml = q.options.map((opt, i) => {
+            let cls = 'option';
+            if (answered[q.id] !== undefined) {
+                cls += ' disabled';
+                if (i === q.correct) cls += ' correct-answer';
+                if (i === answered[q.id] && i !== q.correct) cls += ' wrong-answer';
+            }
+            return `<div class="${cls}" onclick="selectAnswer(${q.id}, ${i})" data-q="${q.id}" data-opt="${i}">
+                <div class="option-letter">${letters[i]}</div>
+                <div>${opt}</div>
+            </div>`;
+        }).join('');
+
+        card.innerHTML = `
+            <div class="question-header">
+                <div class="q-num">Question ${q.id} of 30</div>
+                <div class="question-meta">
+                    <span class="q-tag" style="background: ${q.domainBg}; color: ${q.domainColor};">${q.domain} (${q.weight})</span>
+                    <span class="q-tag" style="background: var(--surface-2); color: var(--text-muted);">${q.scenario}</span>
+                </div>
+            </div>
+            <div class="scenario-context">${q.context}</div>
+            <div class="question-text">${q.question}</div>
+            <div class="options">${optionsHtml}</div>
+            <div class="explanation ${answered[q.id] !== undefined ? 'show' : ''}" id="exp-${q.id}">
+                <div class="exp-title">
+                    ${answered[q.id] !== undefined ? (answered[q.id] === q.correct ? '<span style="color:var(--green)">&#10003; Correct</span>' : '<span style="color:var(--rose)">&#10007; Incorrect — Answer: ' + letters[q.correct] + '</span>') : ''}
+                </div>
+                <div>${q.explanation}</div>
+                <div class="personal-note"><strong>Your context:</strong> ${q.personalNote}</div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function selectAnswer(qId, optIdx) {
+    if (answered[qId] !== undefined) return;
+    answered[qId] = optIdx;
+    renderQuestions();
+    updateScore();
+    const el = document.getElementById(`q-${qId}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function updateScore() {
+    let correctCount = 0, wrongCount = 0;
+    Object.entries(answered).forEach(([qId, ans]) => {
+        if (ans === -1) return;
+        const q = questions.find(q => q.id === parseInt(qId));
+        if (q && ans === q.correct) correctCount++;
+        else if (q) wrongCount++;
+    });
+
+    document.getElementById('scoreCorrect').textContent = correctCount;
+    document.getElementById('scoreWrong').textContent = wrongCount;
+    document.getElementById('scoreRemaining').textContent = 30 - correctCount - wrongCount;
+    const pct = correctCount + wrongCount > 0 ? Math.round(correctCount / (correctCount + wrongCount) * 100) : '--';
+    document.getElementById('scorePercent').textContent = pct + '%';
+    document.getElementById('scorePercent').style.color =
+        pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--amber)' : pct === '--%' ? 'var(--accent)' : 'var(--rose)';
+}
+
+function filterDomain(domain) {
+    currentFilter = domain;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderQuestions();
+}
+
+function resetQuiz() {
+    answered = {};
+    renderQuestions();
+    updateScore();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function revealAll() {
+    questions.forEach(q => {
+        if (answered[q.id] === undefined) answered[q.id] = -1;
+    });
+    renderQuestions();
+    questions.forEach(q => {
+        if (answered[q.id] === -1) {
+            const card = document.getElementById(`q-${q.id}`);
+            if (card) {
+                card.classList.remove('incorrect');
+                card.classList.add('correct');
+                const options = card.querySelectorAll('.option');
+                options.forEach((opt, i) => {
+                    opt.classList.add('disabled');
+                    if (i === q.correct) opt.classList.add('correct-answer');
+                });
+                const exp = document.getElementById(`exp-${q.id}`);
+                if (exp) {
+                    exp.classList.add('show');
+                    exp.querySelector('.exp-title').innerHTML = '<span style="color:var(--blue)">Answer: ' + ['A','B','C','D'][q.correct] + '</span>';
+                }
+            }
+        }
+    });
+}
+
+// ═══════════════════════════════════════════
+// INIT — show history if attempts exist
+// ═══════════════════════════════════════════
+renderQuestions();
+if (getHistory().length > 0) {
+    document.getElementById('historyPanel').style.display = 'block';
+    renderHistory();
+}
+</script>
+</body>
+</html>

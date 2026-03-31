@@ -1,0 +1,68 @@
+{
+  "candidate": "Huiyan Wan",
+  "exam": "CCA-F (Claude Certified Architect — Foundations)",
+  "targetDate": "2026-05-01",
+  "studyStartDate": "2026-03-31",
+  "passingScore": 720,
+  "status": "in_progress",
+  "baseline": {
+    "date": null,
+    "overallPercent": null,
+    "domainScores": {
+      "D1_Agentic_Architecture": null,
+      "D2_Tool_Design_MCP": null,
+      "D3_Claude_Code_Config": null,
+      "D4_Prompt_Engineering": null,
+      "D5_Context_Management": null
+    },
+    "notes": "Take the quiz before any study to establish baseline. Save attempt via the quiz UI."
+  },
+  "advantageMap": {
+    "asOf": "2026-03-31",
+    "D1_Agentic_Architecture": {
+      "level": "moderate-strong",
+      "owned": ["agent-review-panel (original coordinator-subagent)", "subagent-driven-development (adapted, added parallel mode)"],
+      "downloaded_untested": ["ARIS auto-review-loop", "autoresearch-claude-code", "auto-review-loop-llm", "auto-review-loop-minimax"],
+      "gaps": ["Formal hub-and-spoke terminology", "Error propagation patterns", "Hands-on with downloaded tools"]
+    },
+    "D2_Tool_Design_MCP": {
+      "level": "moderate",
+      "owned": [],
+      "using_as_consumer": ["GCP MCP", "Codex MCP"],
+      "gaps": ["Building MCP servers from scratch", "3 MCP primitives (tools/resources/prompts)", "Tool boundary design"]
+    },
+    "D3_Claude_Code_Config": {
+      "level": "strong",
+      "owned": ["20+ original skills on GitHub", "Advanced CLAUDE.md hierarchies", "Hook implementations", "CI/CD with GitHub Actions"],
+      "gaps": ["Slash command internals", "Frontmatter spec details"]
+    },
+    "D4_Prompt_Engineering": {
+      "level": "moderate",
+      "owned": ["Extensive skill prompt writing"],
+      "gaps": ["JSON schema enforcement via tool_use", "Validation retry loops", "Few-shot patterns formally"]
+    },
+    "D5_Context_Management": {
+      "level": "moderate",
+      "owned": ["Experienced context rot in practice", "REVIEW_STATE.json pattern", "session-handoff-consolidator"],
+      "downloaded_untested": ["Plan-Build-Run", "Context Engineering Kit"],
+      "gaps": ["Formal compaction strategies", "Handoff patterns", "Confidence calibration", "Context window budgeting"]
+    }
+  },
+  "quizAttempts": [],
+  "weeklyLog": [
+    {
+      "week": 0,
+      "dates": "2026-03-31",
+      "label": "Setup",
+      "completed": ["Created study plan", "Created practice quiz", "Set up calendar blocks", "Established baseline advantage map"],
+      "notes": "Study folder created. Take baseline quiz today."
+    }
+  ],
+  "studyPlanAdjustments": [],
+  "milestonesCompleted": [],
+  "nextActions": [
+    "Take baseline quiz (all 30 questions) and save attempt",
+    "Check Claude Partner Network access for exam registration",
+    "Start Week 1: D1 Agentic Architecture (Mon Apr 6)"
+  ]
+}
