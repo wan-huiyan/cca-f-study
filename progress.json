@@ -1,68 +1,139 @@
 {
   "candidate": "Huiyan Wan",
   "exam": "CCA-F (Claude Certified Architect — Foundations)",
-  "targetDate": "2026-05-01",
+  "targetDate": "flexible — pending Claude Partner Network access",
   "studyStartDate": "2026-03-31",
   "passingScore": 720,
   "status": "in_progress",
   "baseline": {
-    "date": null,
-    "overallPercent": null,
+    "date": "2026-04-01",
+    "overallPercent": 63,
+    "correct": 19,
+    "total": 30,
     "domainScores": {
-      "D1_Agentic_Architecture": null,
-      "D2_Tool_Design_MCP": null,
-      "D3_Claude_Code_Config": null,
-      "D4_Prompt_Engineering": null,
-      "D5_Context_Management": null
+      "D1_Agentic_Architecture": {"correct": 5, "total": 8, "percent": 63},
+      "D2_Tool_Design_MCP": {"correct": 3, "total": 6, "percent": 50},
+      "D3_Claude_Code_Config": {"correct": 2, "total": 6, "percent": 33},
+      "D4_Prompt_Engineering": {"correct": 5, "total": 6, "percent": 83},
+      "D5_Context_Management": {"correct": 4, "total": 4, "percent": 100}
     },
-    "notes": "Take the quiz before any study to establish baseline. Save attempt via the quiz UI."
+    "notes": "Baseline taken before any study. Q28 corrected (accidental click). D3 was predicted as strongest but scored weakest — gap is formal spec knowledge vs intuitive usage."
   },
   "advantageMap": {
-    "asOf": "2026-03-31",
+    "asOf": "2026-04-01",
     "D1_Agentic_Architecture": {
-      "level": "moderate-strong",
-      "owned": ["agent-review-panel (original coordinator-subagent)", "subagent-driven-development (adapted, added parallel mode)"],
-      "downloaded_untested": ["ARIS auto-review-loop", "autoresearch-claude-code", "auto-review-loop-llm", "auto-review-loop-minimax"],
-      "gaps": ["Formal hub-and-spoke terminology", "Error propagation patterns", "Hands-on with downloaded tools"]
+      "predicted": "moderate-strong",
+      "actual": "moderate (63%)",
+      "gaps": ["Parallel execution mechanics", "allowedTools scoping", "Dependency detection (system does NOT auto-detect)"]
     },
     "D2_Tool_Design_MCP": {
-      "level": "moderate",
-      "owned": [],
-      "using_as_consumer": ["GCP MCP", "Codex MCP"],
-      "gaps": ["Building MCP servers from scratch", "3 MCP primitives (tools/resources/prompts)", "Tool boundary design"]
+      "predicted": "moderate",
+      "actual": "weak (50%)",
+      "gaps": ["3 MCP primitives (tools vs resources vs prompts)", "Resource vs Tool distinction", "Mid-session MCP limitations"]
     },
     "D3_Claude_Code_Config": {
-      "level": "strong",
-      "owned": ["20+ original skills on GitHub", "Advanced CLAUDE.md hierarchies", "Hook implementations", "CI/CD with GitHub Actions"],
-      "gaps": ["Slash command internals", "Frontmatter spec details"]
+      "predicted": "strong",
+      "actual": "critical gap (33%)",
+      "gaps": ["CLAUDE.md hierarchy (accumulated not precedence)", "allowed-tools location (SKILL.md frontmatter)", "Sharing config across teams", "Token reduction approaches"]
     },
     "D4_Prompt_Engineering": {
-      "level": "moderate",
-      "owned": ["Extensive skill prompt writing"],
-      "gaps": ["JSON schema enforcement via tool_use", "Validation retry loops", "Few-shot patterns formally"]
+      "predicted": "moderate",
+      "actual": "strong (83%)",
+      "gaps": ["JSON schema enforcement via tool_use (Q21 wrong)"]
     },
     "D5_Context_Management": {
-      "level": "moderate",
-      "owned": ["Experienced context rot in practice", "REVIEW_STATE.json pattern", "session-handoff-consolidator"],
-      "downloaded_untested": ["Plan-Build-Run", "Context Engineering Kit"],
-      "gaps": ["Formal compaction strategies", "Handoff patterns", "Confidence calibration", "Context window budgeting"]
+      "predicted": "moderate",
+      "actual": "perfect (100%)",
+      "gaps": []
     }
   },
-  "quizAttempts": [],
+  "weakSubTopics": [
+    {"domain": "D1", "subTopic": "Parallel execution (multiple Task calls in one response)", "questionIds": [4], "frequency": 1},
+    {"domain": "D1", "subTopic": "allowedTools scoping for subagents", "questionIds": [7], "frequency": 1},
+    {"domain": "D1", "subTopic": "Dependency detection in parallel dispatch", "questionIds": [8], "frequency": 1},
+    {"domain": "D2", "subTopic": "3 MCP primitives (tools/resources/prompts)", "questionIds": [9], "frequency": 1},
+    {"domain": "D2", "subTopic": "Resource vs Tool distinction", "questionIds": [11], "frequency": 1},
+    {"domain": "D2", "subTopic": "Mid-session MCP limitations", "questionIds": [14], "frequency": 1},
+    {"domain": "D3", "subTopic": "CLAUDE.md hierarchy (accumulated not precedence)", "questionIds": [15], "frequency": 1},
+    {"domain": "D3", "subTopic": "Skills frontmatter allowed-tools", "questionIds": [17], "frequency": 1},
+    {"domain": "D3", "subTopic": "Sharing config across teams", "questionIds": [19], "frequency": 1},
+    {"domain": "D3", "subTopic": "Token reduction approaches", "questionIds": [20], "frequency": 1},
+    {"domain": "D4", "subTopic": "JSON schema enforcement via tool_use", "questionIds": [21], "frequency": 1}
+  ],
+  "learningMoments": [],
+  "quizAttempts": [
+    {
+      "attemptId": 1,
+      "date": "2026-04-01",
+      "type": "baseline",
+      "source": "cca-f-practice-quiz.html (30 pre-built questions)",
+      "overallPercent": 63,
+      "correct": 19,
+      "total": 30,
+      "domainScores": {
+        "D1": {"correct": 5, "total": 8, "percent": 63},
+        "D2": {"correct": 3, "total": 6, "percent": 50},
+        "D3": {"correct": 2, "total": 6, "percent": 33},
+        "D4": {"correct": 5, "total": 6, "percent": 83},
+        "D5": {"correct": 4, "total": 4, "percent": 100}
+      },
+      "notes": "Q28 corrected (accidental click)"
+    }
+  ],
+  "courseCompletion": {
+    "anthropicAcademy": {
+      "claude101": {"status": "not_started", "completedDate": null},
+      "aiFluentyFramework": {"status": "not_started", "completedDate": null},
+      "buildingWithClaudeAPI": {"status": "not_started", "completedDate": null},
+      "claudeCodeInAction": {"status": "not_started", "completedDate": null},
+      "introToMCP": {"status": "not_started", "completedDate": null},
+      "mcpAdvancedTopics": {"status": "not_started", "completedDate": null},
+      "introToAgentSkills": {"status": "not_started", "completedDate": null}
+    },
+    "scenarioPrep": {
+      "customerSupportAgent": false,
+      "codeGenerationClaudeCode": false,
+      "multiAgentResearch": false,
+      "developerProductivity": false,
+      "claudeCodeCICD": false,
+      "structuredDataExtraction": false
+    },
+    "bonusSessions": {
+      "autoresearchLoop": {"status": "not_started", "scheduledDate": "2026-04-12"},
+      "mcpServerBuild": {"status": "not_started", "scheduledDate": "2026-04-19"}
+    }
+  },
+  "recommendationLog": [],
   "weeklyLog": [
     {
       "week": 0,
-      "dates": "2026-03-31",
-      "label": "Setup",
-      "completed": ["Created study plan", "Created practice quiz", "Set up calendar blocks", "Established baseline advantage map"],
-      "notes": "Study folder created. Take baseline quiz today."
+      "dates": "2026-03-31 to 2026-04-01",
+      "label": "Setup + Baseline",
+      "completed": [
+        "Created study plan HTML",
+        "Created 30-question practice quiz",
+        "Set up 22 calendar blocks",
+        "Established advantage map",
+        "Took baseline quiz: 63% (19/30)",
+        "Built adaptive-study skill (Phase 1)"
+      ],
+      "notes": "D3 was the big surprise — predicted strongest, scored weakest. D4 and D5 were predicted weak but scored strong."
     }
   ],
-  "studyPlanAdjustments": [],
-  "milestonesCompleted": [],
+  "studyPlanAdjustments": [
+    {
+      "date": "2026-04-01",
+      "reason": "Baseline quiz revealed D3 as critical gap (33%) instead of predicted 'strong'",
+      "changes": [
+        "D3: Upgrade from 'revision' to 'deep study' — needs more calendar time",
+        "D4: Downgrade from 'fill gaps' to 'light review' — already at 83%",
+        "D5: Skip or skim — already at 100%"
+      ]
+    }
+  ],
   "nextActions": [
-    "Take baseline quiz (all 30 questions) and save attempt",
-    "Check Claude Partner Network access for exam registration",
-    "Start Week 1: D1 Agentic Architecture (Mon Apr 6)"
+    "Run /adaptive-study recommend to get prioritised study focus",
+    "Start Week 1: Focus on D3 (critical gap) and D1 (moderate gap)",
+    "Check Claude Partner Network access for exam registration"
   ]
 }

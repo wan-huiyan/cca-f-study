@@ -1,0 +1,100 @@
+{
+  "exportDate": "2026-04-01T09:38:21.293Z",
+  "examTarget": "CCA-F (Claude Certified Architect — Foundations)",
+  "candidate": "Huiyan Wan",
+  "totalAttempts": 1,
+  "latestScore": "63%",
+  "baselineScore": "63%",
+  "improvement": "0%",
+  "attempts": [
+    {
+      "id": 1,
+      "date": "2026-04-01T09:26:35.327Z",
+      "dateFormatted": "1 Apr 2026, 10:26",
+      "questionsAnswered": 30,
+      "correct": 19,
+      "wrong": 11,
+      "percent": 63,
+      "domainScores": {
+        "D1": {
+          "correct": 5,
+          "total": 8
+        },
+        "D2": {
+          "correct": 3,
+          "total": 6
+        },
+        "D3": {
+          "correct": 2,
+          "total": 6
+        },
+        "D4": {
+          "correct": 5,
+          "total": 6
+        },
+        "D5": {
+          "correct": 4,
+          "total": 4
+        }
+      },
+      "wrongQuestions": [
+        {
+          "id": 4,
+          "domain": "D1",
+          "question": "How do you enable parallel subagent execution in a Claude Code coordinator?..."
+        },
+        {
+          "id": 7,
+          "domain": "D1",
+          "question": "What happens when the Knowledge Base Agent tries to search for information?..."
+        },
+        {
+          "id": 8,
+          "domain": "D1",
+          "question": "The coordinator dispatches all three agents in a single response. What will happ..."
+        },
+        {
+          "id": 9,
+          "domain": "D2",
+          "question": "What are the three core primitives that MCP servers can expose?..."
+        },
+        {
+          "id": 11,
+          "domain": "D2",
+          "question": "Which MCP primitive should you use for exposing read-only access to a BQ table's..."
+        },
+        {
+          "id": 14,
+          "domain": "D2",
+          "question": "What happens when you add an MCP server mid-session via 'claude mcp add'?..."
+        },
+        {
+          "id": 15,
+          "domain": "D3",
+          "question": "What is the precedence order when these CLAUDE.md files contain conflicting inst..."
+        },
+        {
+          "id": 17,
+          "domain": "D3",
+          "question": "Where do you define a skill's allowed tools?..."
+        },
+        {
+          "id": 19,
+          "domain": "D3",
+          "question": "What is the recommended approach for sharing Claude Code configuration across a ..."
+        },
+        {
+          "id": 20,
+          "domain": "D3",
+          "question": "Which of the following is NOT a valid approach to reduce token consumption?..."
+        },
+        {
+          "id": 21,
+          "domain": "D4",
+          "question": "What is the most reliable way to enforce structured JSON output from Claude?..."
+        }
+      ],
+      "label": "Baseline (pre-study) (Q28 corrected)"
+    }
+  ]
+}
