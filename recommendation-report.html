@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCA-F Study Recommendations | Huiyan Wan</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface-2: #232734;
+            --border: #2d3142;
+            --text: #e4e4e7;
+            --text-muted: #9ca3af;
+            --accent: #c084fc;
+            --accent-dim: rgba(192, 132, 252, 0.15);
+            --green: #4ade80;
+            --green-dim: rgba(74, 222, 128, 0.15);
+            --amber: #fbbf24;
+            --amber-dim: rgba(251, 191, 36, 0.15);
+            --blue: #60a5fa;
+            --blue-dim: rgba(96, 165, 250, 0.15);
+            --rose: #fb7185;
+            --rose-dim: rgba(251, 113, 133, 0.15);
+            --cyan: #22d3ee;
+            --cyan-dim: rgba(34, 211, 238, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* ── Header ── */
+        .header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--blue), var(--cyan));
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .header .subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+        .header .meta {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .meta-item {
+            background: var(--bg);
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        .meta-item strong { color: var(--accent); }
+
+        /* ── Section titles ── */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-title .icon { font-size: 1.15rem; }
+        .section { margin-bottom: 2.5rem; }
+
+        /* ── Score overview bars ── */
+        .domain-row {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            display: grid;
+            grid-template-columns: 220px 1fr 90px;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .domain-left {}
+        .domain-name { font-weight: 600; font-size: 0.95rem; }
+        .domain-fraction { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; }
+        .domain-bar-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .domain-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .domain-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        .bar-pass-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            position: relative;
+        }
+        .domain-pct {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: right;
+        }
+        .domain-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        .badge-critical { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(251,113,133,0.25); }
+        .badge-focus    { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(251,113,133,0.25); }
+        .badge-good     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+        .badge-strong   { background: var(--green-dim); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+        .badge-amber    { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(251,191,36,0.25); }
+
+        /* ── Callout ── */
+        .callout {
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            margin-bottom: 2rem;
+        }
+        .callout-accent {
+            background: var(--accent-dim);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+        }
+        .callout-cyan {
+            background: var(--cyan-dim);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+        }
+        .callout h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+        .callout-accent h4 { color: var(--accent); }
+        .callout-cyan h4   { color: var(--cyan); }
+        .callout p { font-size: 0.9rem; line-height: 1.65; }
+
+        /* ── Priority cards ── */
+        .priority-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .priority-header {
+            padding: 1.1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .priority-header-left { display: flex; align-items: center; gap: 0.75rem; }
+        .priority-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .priority-header h3 { font-size: 1rem; font-weight: 700; }
+        .priority-header .domain-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+        .priority-meta {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .priority-meta strong { display: block; font-size: 1rem; font-weight: 700; }
+
+        .subtopic-list { padding: 0; }
+        .subtopic-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtopic-row:last-child { border-bottom: none; }
+        .subtopic-cell {
+            padding: 1rem 1.5rem;
+            font-size: 0.85rem;
+            border-right: 1px solid var(--border);
+        }
+        .subtopic-cell:last-child { border-right: none; }
+        .subtopic-cell .cell-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+        .subtopic-cell .cell-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .subtopic-cell .cell-body  { color: var(--text-muted); line-height: 1.5; }
+        .subtopic-cell a {
+            color: var(--blue);
+            text-decoration: none;
+            font-size: 0.82rem;
+        }
+        .subtopic-cell a:hover { text-decoration: underline; }
+        .subtopic-cell .link-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .subtopic-cell .exercise-text {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .priority-footer {
+            padding: 0.85rem 1.5rem;
+            border-top: 1px solid var(--border);
+            background: rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+        .priority-footer strong { color: var(--green); }
+
+        /* ── Projected improvement ── */
+        .projection-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            font-size: 0.88rem;
+        }
+        .projection-table thead tr {
+            background: var(--surface-2);
+            border-bottom: 1px solid var(--border);
+        }
+        .projection-table th {
+            padding: 0.85rem 1.2rem;
+            text-align: left;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .projection-table td {
+            padding: 0.9rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .projection-table tr:last-child td { border-bottom: none; }
+        .projection-table .phase-label { font-weight: 600; }
+        .score-from { color: var(--text-muted); }
+        .score-arrow { color: var(--text-muted); margin: 0 0.4rem; }
+        .score-to   { font-weight: 700; }
+
+        /* ── Trajectory bar ── */
+        .trajectory-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 2rem;
+        }
+        .trajectory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+        }
+        .trajectory-header .traj-label { font-size: 0.8rem; color: var(--text-muted); }
+        .trajectory-header .traj-title { font-weight: 600; font-size: 0.95rem; }
+        .traj-bar-outer {
+            position: relative;
+            height: 36px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: visible;
+            margin-bottom: 0.6rem;
+        }
+        /* gradient fill representing start → target */
+        .traj-bar-base {
+            position: absolute;
+            top: 0; left: 0;
+            width: 63%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(251,191,36,0.35) 0%, rgba(251,191,36,0.5) 100%);
+            border-radius: 8px 0 0 8px;
+        }
+        .traj-bar-gain {
+            position: absolute;
+            top: 0;
+            left: 63%;
+            width: 30%;   /* 63% → 93% = 30 pct points across remaining 37% of bar */
+            height: 100%;
+            background: linear-gradient(90deg, rgba(74,222,128,0.4) 0%, rgba(74,222,128,0.65) 100%);
+            border-radius: 0 8px 8px 0;
+        }
+        /* pass line at 72% */
+        .traj-pass-line {
+            position: absolute;
+            top: -6px;
+            bottom: -6px;
+            left: 72%;
+            width: 2px;
+            background: var(--rose);
+            border-radius: 2px;
+        }
+        .traj-pass-line::after {
+            content: '72% pass';
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.68rem;
+            color: var(--rose);
+            white-space: nowrap;
+            font-weight: 600;
+        }
+        /* start marker */
+        .traj-marker {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid var(--bg);
+        }
+        .traj-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+        .traj-legend {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .legend-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        .footer code {
+            background: var(--surface-2);
+            padding: 0.1rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            color: var(--accent);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .header h1 { font-size: 1.6rem; }
+            .domain-row { grid-template-columns: 1fr auto; }
+            .domain-bar-wrap { display: none; }
+            .subtopic-row { grid-template-columns: 1fr; }
+            .subtopic-cell { border-right: none; border-bottom: 1px solid var(--border); }
+            .subtopic-cell:last-child { border-bottom: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ── HEADER ── -->
+    <div class="header">
+        <h1>CCA-F Study Recommendations</h1>
+        <p class="subtitle">Adaptive analysis based on baseline quiz (63%, 19/30)</p>
+        <div class="meta">
+            <div class="meta-item"><strong>Date:</strong> April 1, 2026</div>
+            <div class="meta-item"><strong>Baseline:</strong> 63% &mdash; 19 / 30</div>
+            <div class="meta-item"><strong>Pass Threshold:</strong> 72%</div>
+            <div class="meta-item"><strong>Target:</strong> 93% after 3 phases</div>
+        </div>
+    </div>
+
+
+    <!-- ── SECTION 1: SCORE OVERVIEW ── -->
+    <div class="section">
+        <div class="section-title">
+            <span class="icon">&#x1F4CA;</span>
+            Section 1 &mdash; Score Overview
+        </div>
+
+        <!-- D1 -->
+        <div class="domain-row">
+            <div class="domain-left">
+                <div class="domain-name">
+                    D1: Agentic Architecture
+                    <span class="domain-badge badge-amber">Monitor</span>
+                </div>
+                <div class="domain-fraction">5 / 8 correct &middot; weight 27%</div>
+            </div>
+            <div class="domain-bar-wrap">
+                <div class="domain-bar">
+                    <div class="domain-bar-fill" style="width:63%; background: var(--amber);"></div>
+                </div>
+                <div class="bar-pass-label">Pass line at 72%</div>
+            </div>
+            <div class="domain-pct" style="color: var(--amber);">63%</div>
+        </div>
+
+        <!-- D2 -->
+        <div class="domain-row">
+            <div class="domain-left">
+                <div class="domain-name">
+                    D2: Tool Design &amp; MCP
+                    <span class="domain-badge badge-focus">Focus</span>
+                </div>
+                <div class="domain-fraction">3 / 6 correct &middot; weight 18%</div>
+            </div>
+            <div class="domain-bar-wrap">
+                <div class="domain-bar">
+                    <div class="domain-bar-fill" style="width:50%; background: var(--rose);"></div>
+                </div>
+                <div class="bar-pass-label">Pass line at 72%</div>
+            </div>
+            <div class="domain-pct" style="color: var(--rose);">50%</div>
+        </div>
+
+        <!-- D3 -->
+        <div class="domain-row" style="border-color: rgba(251,113,133,0.4); box-shadow: 0 0 0 1px rgba(251,113,133,0.15);">
+            <div class="domain-left">
+                <div class="domain-name">
+                    D3: Claude Code Config
+                    <span class="domain-badge badge-critical">Critical</span>
+                </div>
+                <div class="domain-fraction">2 / 6 correct &middot; weight 20%</div>
+            </div>
+            <div class="domain-bar-wrap">
+                <div class="domain-bar">
+                    <div class="domain-bar-fill" style="width:33%; background: var(--rose);"></div>
+                </div>
+                <div class="bar-pass-label">Pass line at 72%</div>
+            </div>
+            <div class="domain-pct" style="color: var(--rose);">33%</div>
+        </div>
+
+        <!-- D4 -->
+        <div class="domain-row">
+            <div class="domain-left">
+                <div class="domain-name">
+                    D4: Prompt Engineering
+                    <span class="domain-badge badge-good">Good</span>
+                </div>
+                <div class="domain-fraction">5 / 6 correct &middot; weight 20%</div>
+            </div>
+            <div class="domain-bar-wrap">
+                <div class="domain-bar">
+                    <div class="domain-bar-fill" style="width:83%; background: var(--green);"></div>
+                </div>
+                <div class="bar-pass-label">Pass line at 72%</div>
+            </div>
+            <div class="domain-pct" style="color: var(--green);">83%</div>
+        </div>
+
+        <!-- D5 -->
+        <div class="domain-row">
+            <div class="domain-left">
+                <div class="domain-name">
+                    D5: Context Management
+                    <span class="domain-badge badge-strong">Strong</span>
+                </div>
+                <div class="domain-fraction">4 / 4 correct &middot; weight 15%</div>
+            </div>
+            <div class="domain-bar-wrap">
+                <div class="domain-bar">
+                    <div class="domain-bar-fill" style="width:100%; background: var(--green);"></div>
+                </div>
+                <div class="bar-pass-label">Pass line at 72%</div>
+            </div>
+            <div class="domain-pct" style="color: var(--green);">100%</div>
+        </div>
+    </div>
+
+
+    <!-- ── SECTION 2: ROOT CAUSE ANALYSIS ── -->
+    <div class="section">
+        <div class="section-title">
+            <span class="icon">&#x1F50D;</span>
+            Section 2 &mdash; Root Cause Analysis
+        </div>
+
+        <div class="callout callout-accent">
+            <h4>Configuration-Execution Mismatch</h4>
+            <p>
+                You know <em>what</em> to do but not <em>where</em> things are declared or <em>how</em> they are enforced.
+                Every wrong answer came from practical intuition conflicting with formal specification.
+                You understand the intent behind features like <code style="background:rgba(192,132,252,0.15); padding:0.1rem 0.4rem; border-radius:4px; color:var(--accent);">allowed-tools</code> and
+                <code style="background:rgba(192,132,252,0.15); padding:0.1rem 0.4rem; border-radius:4px; color:var(--accent);">CLAUDE.md</code>,
+                but you mis-locate where they live and over-estimate their scope.
+                The fix is not more conceptual learning &mdash; it is one focused session mapping
+                each feature to its exact declaration file and enforced boundary.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ── SECTION 3: PRIORITY STUDY PLAN ── -->
+    <div class="section">
+        <div class="section-title">
+            <span class="icon">&#x1F3AF;</span>
+            Section 3 &mdash; Priority Study Plan
+        </div>
+
+        <!-- ── PRIORITY 1: D3 ── -->
+        <div class="priority-card">
+            <div class="priority-header" style="border-left: 4px solid var(--rose);">
+                <div class="priority-header-left">
+                    <div class="priority-num" style="background: var(--rose-dim); color: var(--rose);">1</div>
+                    <div>
+                        <h3>D3 &mdash; Claude Code Configuration</h3>
+                        <div class="domain-tag">33% baseline &middot; weight 20% &middot; highest ROI</div>
+                    </div>
+                </div>
+                <div class="priority-meta">
+                    <strong style="color:var(--rose);">33%</strong>
+                    Current score
+                </div>
+            </div>
+
+            <div class="subtopic-list">
+
+                <!-- Sub-topic 1 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">CLAUDE.md hierarchy</div>
+                        <div class="cell-body">Thought files load with precedence; they actually accumulate and concatenate from global &#8594; project &#8594; sub-folder.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">How CLAUDE.md files load &rarr;</a>
+                            <a href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank" rel="noopener">Course: Claude Code in Action &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Create CLAUDE.md at <code>~/</code>, <code>~/project/</code>, and <code>~/project/src/</code>. Run Claude Code in each folder. Verify which instructions appear together.</div>
+                    </div>
+                </div>
+
+                <!-- Sub-topic 2 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">allowed-tools location</div>
+                        <div class="cell-body">Assumed it lives in <code>settings.json</code>; it is declared in <strong>SKILL.md frontmatter YAML</strong> under the <code>allowed-tools</code> key.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Frontmatter reference &rarr;</a>
+                            <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">Configuration scopes &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Write a minimal SKILL.md with <code>allowed-tools: [Bash, Read]</code>. Test that Write is blocked. Then add Write and confirm it becomes available.</div>
+                    </div>
+                </div>
+
+                <!-- Sub-topic 3 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">Sharing config across team</div>
+                        <div class="cell-body">The correct pattern is to commit <code>CLAUDE.md</code> + <code>.claude/settings.json</code> to the repo root so all collaborators inherit the same context.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">Configuration scopes &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Check your own repo. Locate (or create) <code>.claude/settings.json</code>. Confirm it is tracked in git, not listed in <code>.gitignore</code>.</div>
+                    </div>
+                </div>
+
+                <!-- Sub-topic 4 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">Token reduction via CLAUDE.md</div>
+                        <div class="cell-body">CLAUDE.md is a context-injection file; it cannot set API parameters such as <code>max_tokens</code>. Token limits are API-level controls only.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">Memory &amp; CLAUDE.md scope &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Try adding <code>max_tokens: 1024</code> to a CLAUDE.md. Observe that it is treated as plain text instruction, not an API parameter override.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="priority-footer">
+                <span>Estimated time: <strong>30 min</strong></span>
+                <span>Expected gain: <strong>+13%</strong> &rarr; score reaches ~76% (above pass threshold)</span>
+            </div>
+        </div>
+
+
+        <!-- ── PRIORITY 2: D2 ── -->
+        <div class="priority-card">
+            <div class="priority-header" style="border-left: 4px solid var(--amber);">
+                <div class="priority-header-left">
+                    <div class="priority-num" style="background: var(--amber-dim); color: var(--amber);">2</div>
+                    <div>
+                        <h3>D2 &mdash; Tool Design &amp; MCP</h3>
+                        <div class="domain-tag">50% baseline &middot; weight 18% &middot; high ROI</div>
+                    </div>
+                </div>
+                <div class="priority-meta">
+                    <strong style="color:var(--amber);">50%</strong>
+                    Current score
+                </div>
+            </div>
+
+            <div class="subtopic-list">
+
+                <!-- Sub-topic 1 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">Three MCP primitives</div>
+                        <div class="cell-body">
+                            <strong>Tools</strong> &mdash; model-controlled actions.<br>
+                            <strong>Resources</strong> &mdash; app-controlled read-only data.<br>
+                            <strong>Prompts</strong> &mdash; user-controlled templates.
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://modelcontextprotocol.io/docs/learn/architecture" target="_blank" rel="noopener">MCP architecture overview &rarr;</a>
+                            <a href="https://anthropic.skilljar.com/introduction-to-model-context-protocol" target="_blank" rel="noopener">Course: Intro to MCP &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Draw a 3-column table labelling who controls each primitive (model / app / user) and give one real-world example per column.</div>
+                    </div>
+                </div>
+
+                <!-- Sub-topic 2 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">Resource vs Tool</div>
+                        <div class="cell-body">Resources expose read-only data the application decides when to surface. Tools are executable actions the model decides when to invoke.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://modelcontextprotocol.io/docs/concepts/resources" target="_blank" rel="noopener">MCP Resources concept &rarr;</a>
+                            <a href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">MCP in Claude Code &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Given: "fetch a database row" and "display the current file tree" &mdash; classify each as Resource or Tool and justify your answer.</div>
+                    </div>
+                </div>
+
+                <!-- Sub-topic 3 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">Mid-session server limitation</div>
+                        <div class="cell-body">New MCP servers cannot be hot-loaded into a running session. The session must be restarted for a newly registered server to become available.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://anthropic.skilljar.com/model-context-protocol-advanced-topics" target="_blank" rel="noopener">Course: MCP Advanced Topics &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Add a new MCP server to <code>.claude/settings.json</code> while a Claude Code session is open. Confirm the server is unavailable until restart.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="priority-footer">
+                <span>Estimated time: <strong>40 min</strong></span>
+                <span>Expected gain: <strong>+10%</strong> &rarr; cumulative score ~86%</span>
+            </div>
+        </div>
+
+
+        <!-- ── PRIORITY 3: D1 ── -->
+        <div class="priority-card">
+            <div class="priority-header" style="border-left: 4px solid var(--blue);">
+                <div class="priority-header-left">
+                    <div class="priority-num" style="background: var(--blue-dim); color: var(--blue);">3</div>
+                    <div>
+                        <h3>D1 &mdash; Agentic Architecture</h3>
+                        <div class="domain-tag">63% baseline &middot; weight 27% &middot; largest domain</div>
+                    </div>
+                </div>
+                <div class="priority-meta">
+                    <strong style="color:var(--blue);">63%</strong>
+                    Current score
+                </div>
+            </div>
+
+            <div class="subtopic-list">
+
+                <!-- Sub-topic 1 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">Parallel execution</div>
+                        <div class="cell-body">Emit multiple <code>Task</code> calls in a single model response. <code>allowedTools</code> must explicitly include <code>"Task"</code> for this to work.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Skills &amp; Task tool reference &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Write a SKILL.md that spawns two parallel sub-agents. Confirm both complete concurrently by checking log timestamps.</div>
+                    </div>
+                </div>
+
+                <!-- Sub-topic 2 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">allowedTools enforcement</div>
+                        <div class="cell-body">When a tool is not listed in <code>allowedTools</code>, the call is <strong>blocked outright</strong> &mdash; not degraded or substituted with a fallback.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">Configuration scopes &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Exclude <code>Write</code> from <code>allowedTools</code> in a skill. Ask Claude Code to create a file. Observe the blocked error rather than a graceful fallback.</div>
+                    </div>
+                </div>
+
+                <!-- Sub-topic 3 -->
+                <div class="subtopic-row">
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Sub-topic</div>
+                        <div class="cell-title">Dependency detection</div>
+                        <div class="cell-body">The system does <strong>not</strong> auto-detect task dependencies. The coordinator agent must explicitly sequence dependent tasks.</div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Study Resource</div>
+                        <div class="link-row">
+                            <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Agentic orchestration guide &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="subtopic-cell">
+                        <div class="cell-label">Hands-on Exercise</div>
+                        <div class="exercise-text">Design a two-step agentic flow where step 2 depends on step 1's output. Write the coordinator prompt that forces sequential execution.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="priority-footer">
+                <span>Estimated time: <strong>40 min</strong></span>
+                <span>Expected gain: <strong>+7%</strong> &rarr; cumulative score ~93%</span>
+            </div>
+        </div>
+
+    </div><!-- /section 3 -->
+
+
+    <!-- ── SECTION 4: CROSS-DOMAIN INSIGHTS ── -->
+    <div class="section">
+        <div class="section-title">
+            <span class="icon">&#x1F517;</span>
+            Section 4 &mdash; Cross-Domain Insights
+        </div>
+
+        <div class="callout callout-cyan">
+            <h4>Study these together: D1 allowedTools &#8596; D3 frontmatter</h4>
+            <p>
+                <strong style="color:var(--cyan);">D1 allowedTools</strong> (in SKILL.md &mdash; skill scope) and
+                <strong style="color:var(--cyan);">D3 frontmatter</strong> (in SKILL.md &mdash; configuration scope)
+                are the <em>same concept at different scopes</em>.
+                Both control what Claude Code is permitted to do, just at different levels of the hierarchy.
+                Understanding one instantly reinforces the other.
+                A single 20-minute session covering the SKILL.md frontmatter spec will close gaps in both domains simultaneously.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ── SECTION 5: PROJECTED IMPROVEMENT ── -->
+    <div class="section">
+        <div class="section-title">
+            <span class="icon">&#x1F4C8;</span>
+            Section 5 &mdash; Projected Improvement
+        </div>
+
+        <table class="projection-table">
+            <thead>
+                <tr>
+                    <th>Phase</th>
+                    <th>Time</th>
+                    <th>Focus Domain</th>
+                    <th>Expected Score</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="phase-label">Baseline</td>
+                    <td style="color:var(--text-muted);">&mdash;</td>
+                    <td style="color:var(--text-muted);">Quiz results</td>
+                    <td>
+                        <span class="score-from">63%</span>
+                    </td>
+                    <td>
+                        <span style="background:var(--amber-dim); color:var(--amber); padding:0.2rem 0.6rem; border-radius:5px; font-size:0.75rem; font-weight:600;">Below pass</span>
+                    </td>
+                </tr>
+                <tr style="background: rgba(251,113,133,0.04);">
+                    <td class="phase-label">Phase 1</td>
+                    <td>30 min</td>
+                    <td>D3 &mdash; Claude Code Config</td>
+                    <td>
+                        <span class="score-from">63%</span>
+                        <span class="score-arrow">&rarr;</span>
+                        <span class="score-to" style="color:var(--green);">76%</span>
+                    </td>
+                    <td>
+                        <span style="background:var(--green-dim); color:var(--green); padding:0.2rem 0.6rem; border-radius:5px; font-size:0.75rem; font-weight:600;">Passes!</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="phase-label">Phase 2</td>
+                    <td>40 min</td>
+                    <td>D2 &mdash; Tool Design &amp; MCP</td>
+                    <td>
+                        <span class="score-from">76%</span>
+                        <span class="score-arrow">&rarr;</span>
+                        <span class="score-to" style="color:var(--green);">86%</span>
+                    </td>
+                    <td>
+                        <span style="background:var(--green-dim); color:var(--green); padding:0.2rem 0.6rem; border-radius:5px; font-size:0.75rem; font-weight:600;">Comfortable</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="phase-label">Phase 3</td>
+                    <td>40 min</td>
+                    <td>D1 &mdash; Agentic Architecture</td>
+                    <td>
+                        <span class="score-from">86%</span>
+                        <span class="score-arrow">&rarr;</span>
+                        <span class="score-to" style="color:var(--accent);">93%</span>
+                    </td>
+                    <td>
+                        <span style="background:var(--accent-dim); color:var(--accent); padding:0.2rem 0.6rem; border-radius:5px; font-size:0.75rem; font-weight:600;">Exam-ready</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Trajectory bar -->
+        <div class="trajectory-wrap">
+            <div class="trajectory-header">
+                <div>
+                    <div class="traj-title">Score Trajectory: 63% &#8594; 93%</div>
+                    <div class="traj-label">2 h 10 min total study investment</div>
+                </div>
+                <div style="text-align:right; font-size:0.8rem; color:var(--text-muted);">
+                    <span style="color:var(--rose); font-weight:600;">72%</span> pass line marked
+                </div>
+            </div>
+
+            <!-- bar -->
+            <div class="traj-bar-outer">
+                <div class="traj-bar-base"></div>
+                <div class="traj-bar-gain"></div>
+                <!-- pass line at 72% -->
+                <div class="traj-pass-line"></div>
+                <!-- start dot -->
+                <div class="traj-marker" style="left:63%; background:var(--amber);"></div>
+                <!-- end dot -->
+                <div class="traj-marker" style="left:93%; background:var(--accent);"></div>
+            </div>
+
+            <div class="traj-scale">
+                <span>0%</span>
+                <span>10%</span>
+                <span>20%</span>
+                <span>30%</span>
+                <span>40%</span>
+                <span>50%</span>
+                <span>60%</span>
+                <span>70%</span>
+                <span>80%</span>
+                <span>90%</span>
+                <span>100%</span>
+            </div>
+
+            <div class="traj-legend">
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background:rgba(251,191,36,0.45);"></div>
+                    <span>Current baseline (63%)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background:rgba(74,222,128,0.55);"></div>
+                    <span>Projected gain after 3 phases (+30%)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background:var(--rose); height:4px; width:12px; border-radius:1px;"></div>
+                    <span>72% pass threshold</span>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /section 5 -->
+
+
+    <!-- ── FOOTER ── -->
+    <div class="footer">
+        Generated 2026-04-01 by <code>/adaptive-study recommend</code> &nbsp;&middot;&nbsp; Huiyan Wan
+    </div>
+
+</div><!-- /container -->
+</body>
+</html>

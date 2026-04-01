@@ -478,29 +478,29 @@
         <div class="section-title"><span class="icon">&#x1F9ED;</span> Your Advantage Map</div>
         <div class="advantage-grid">
             <div class="advantage-card">
-                <div class="domain-label" style="color: var(--accent);">D1: Agentic Architecture (27%)</div>
-                <span class="level level-moderate">Moderate-Strong</span>
-                <div class="gap-text">Built agent-review-panel (original, multi-agent coordinator-subagent). Adapted subagent-driven-development from obra/superpowers (added parallel mode). Downloaded but NOT yet tried: ARIS auto-review-loop, autoresearch. <strong>Gap:</strong> Formalise hub-and-spoke terminology, error propagation patterns. Run the downloaded tools to build hands-on depth.</div>
+                <div class="domain-label" style="color: var(--accent);">D1: Agentic Architecture (27%) — Baseline: 63%</div>
+                <span class="level level-moderate">Moderate (63%)</span>
+                <div class="gap-text">Built agent-review-panel (original coordinator-subagent). <strong>Weak sub-topics:</strong> Parallel execution mechanics (multiple Task calls), allowedTools enforcement, dependency detection (NOT auto-detected). Study priority: medium.</div>
             </div>
             <div class="advantage-card">
-                <div class="domain-label" style="color: var(--cyan);">D2: Tool Design & MCP (18%)</div>
-                <span class="level level-moderate">Moderate</span>
-                <div class="gap-text">Using GCP MCP + Codex MCP as a consumer, but haven't built MCP servers from scratch. <strong>Gap:</strong> Study 3 MCP primitives formally, tool boundary design, building servers in Python.</div>
+                <div class="domain-label" style="color: var(--cyan);">D2: Tool Design & MCP (18%) — Baseline: 50%</div>
+                <span class="level level-moderate">Weak (50%)</span>
+                <div class="gap-text">MCP consumer only (GCP + Codex MCP). <strong>Weak sub-topics:</strong> 3 MCP primitives (Tools/Resources/Prompts), Resource vs Tool distinction, mid-session MCP limitations. Study priority: HIGH.</div>
+            </div>
+            <div class="advantage-card" style="border: 1px solid var(--rose);">
+                <div class="domain-label" style="color: var(--rose);">D3: Claude Code Config (20%) — Baseline: 33% CRITICAL</div>
+                <span class="level" style="background: var(--rose-dim); color: var(--rose);">Critical Gap (33%)</span>
+                <div class="gap-text">Power user but doesn't know the spec. <strong>Weak sub-topics:</strong> CLAUDE.md hierarchy (accumulated not precedence), allowed-tools in SKILL.md frontmatter, sharing config via repo, CLAUDE.md can't set API params. Study priority: HIGHEST.</div>
             </div>
             <div class="advantage-card">
-                <div class="domain-label" style="color: var(--blue);">D3: Claude Code Config (20%)</div>
-                <span class="level level-strong">Strong</span>
-                <div class="gap-text">20+ original skills published to GitHub, CLAUDE.md hierarchies, hooks, CI/CD with GitHub Actions. <strong>Gap:</strong> Review slash command internals, frontmatter spec details.</div>
+                <div class="domain-label" style="color: var(--amber);">D4: Prompt Engineering (20%) — Baseline: 83%</div>
+                <span class="level level-strong">Strong (83%)</span>
+                <div class="gap-text">Practical prompt experience translated well. <strong>Only gap:</strong> JSON schema enforcement via tool_use (Q21). Light review only.</div>
             </div>
             <div class="advantage-card">
-                <div class="domain-label" style="color: var(--amber);">D4: Prompt Engineering (20%)</div>
-                <span class="level level-moderate">Moderate</span>
-                <div class="gap-text">Writes skill prompts extensively but may lack formal knowledge of JSON schema enforcement, validation retry loops, few-shot patterns. <strong>Focus area.</strong></div>
-            </div>
-            <div class="advantage-card">
-                <div class="domain-label" style="color: var(--green);">D5: Context Management (15%)</div>
-                <span class="level level-moderate">Moderate</span>
-                <div class="gap-text">Hit context rot in practice but haven't formalised mitigation. Downloaded Plan-Build-Run and context tools but not tried. <strong>Focus area.</strong></div>
+                <div class="domain-label" style="color: var(--green);">D5: Context Management (15%) — Baseline: 100%</div>
+                <span class="level level-strong">Perfect (100%)</span>
+                <div class="gap-text">Context rot experience, REVIEW_STATE.json, session handoffs — all translated perfectly. Skip study, re-test periodically for retention.</div>
             </div>
         </div>
 
@@ -678,13 +678,13 @@
 
         <!-- Secret Weapon -->
         <div class="callout">
-            <h4>&#x1F50B; Your Secret Weapon — You're Not Starting from Zero</h4>
+            <h4>&#x1F50B; Baseline Quiz Results — What Surprised Us</h4>
             <ul>
-                <li><strong>D1</strong> — You built agent-review-panel (original coordinator-subagent orchestration) and adapted subagent-driven-development with parallel mode</li>
-                <li><strong>D2</strong> — You use GCP MCP + Codex MCP daily as a consumer — the courses will formalise what you already do intuitively</li>
-                <li><strong>D3</strong> — 20+ original skills published to GitHub, advanced .claude/ setup with hooks — more skill-building experience than most candidates</li>
-                <li><strong>D4/D5</strong> — Your weakest domains, but your skill prompt writing experience gives you a head start on structured output patterns</li>
-                <li><strong>Bonus</strong> — ARIS, autoresearch, schliff are installed and ready to try as hands-on study material for D1 and D5</li>
+                <li><strong>D5 (100%)</strong> and <strong>D4 (83%)</strong> — Predicted as weak, scored strong! Practical experience with context rot and skill prompts translated directly</li>
+                <li><strong>D3 (33%)</strong> — Predicted as strongest, scored weakest! Power user ≠ knowing the spec. Root cause: "Configuration-Execution Mismatch"</li>
+                <li><strong>D2 (50%)</strong> — As predicted. MCP consumer, not builder. 3 primitives distinction is the key gap</li>
+                <li><strong>D1 (63%)</strong> — As predicted. Parallel execution mechanics and dependency detection are the specific gaps</li>
+                <li><strong>Fastest win:</strong> Fix D3 alone (30 min study) → 63% to 76% — past the 72% passing threshold!</li>
             </ul>
         </div>
 
