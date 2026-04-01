@@ -26,6 +26,8 @@
             --cyan-dim: rgba(34, 211, 238, 0.15);
         }
 
+        html { scroll-behavior: smooth; }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -33,7 +35,7 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            padding: 2rem;
+            padding: 0 2rem 2rem;
         }
 
         .container { max-width: 1100px; margin: 0 auto; }
@@ -686,9 +688,341 @@
         }
         .info-card-header-left { display: flex; align-items: center; gap: 0.75rem; }
 
+        /* ── Sticky Navigation Bar ── */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(26, 29, 39, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            height: 56px;
+            margin-bottom: 1.5rem;
+            margin-left: -2rem;
+            margin-right: -2rem;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .nav-brand-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            white-space: nowrap;
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            flex: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .nav-links::-webkit-scrollbar { display: none; }
+        .nav-link {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: inherit;
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s ease, color 0.2s ease;
+            line-height: 1.4;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-link:hover {
+            background: var(--surface-2);
+            color: var(--text);
+        }
+        .nav-link.active {
+            background: var(--accent-dim);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .nav-timer {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            flex-shrink: 0;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            border-left: 1px solid var(--border);
+            padding-left: 1rem;
+        }
+        .nav-timer .timer-display {
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            color: var(--cyan);
+            font-weight: 600;
+            font-size: 0.82rem;
+            letter-spacing: 0.03em;
+        }
+        .nav-timer .timer-total {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Claude pixel mascot ── */
+        /*
+         * Pixel art built with box-shadow technique.
+         * The element itself is 4x4px (one pixel unit).
+         * Every shadow offset is a multiple of 4px.
+         * Origin of coordinates: top-left of the element.
+         *
+         * Colour palette:
+         *   #D97706  warm orange body (Claude brand)
+         *   #C05500  darker orange for shading
+         *   #1a1d27  eye fill (matches --surface bg)
+         *   #0f1117  pupil / foot outline
+         *
+         * Layout (10 rows x 8 cols, 1 unit = 4px):
+         *   Row 0  (y=0):   col 2-5  head top
+         *   Row 1  (y=4):   col 1-6  head wide
+         *   Row 2  (y=8):   col 1-6  head wide
+         *   Row 3  (y=12):  col 1-6  eyes row (col 2,3 = eye; col 4,5 = eye)
+         *   Row 4  (y=16):  col 1-6  face / smile
+         *   Row 5  (y=20):  col 1-6  neck/body top
+         *   Row 6  (y=24):  col 1-6  body mid
+         *   Row 7  (y=28):  col 1-6  body low
+         *   Row 8  (y=32):  col 2,5  feet
+         *   Row 9  (y=36):  col 2,5  feet bottom
+         */
+        .mascot-pixel {
+            width: 4px;
+            height: 4px;
+            position: relative;
+            image-rendering: pixelated;
+            display: inline-block;
+            flex-shrink: 0;
+            /* box-shadow draws the actual sprite */
+            box-shadow:
+                /* Row 0 — head top arc */
+                8px  0px #D97706,
+                12px 0px #D97706,
+                16px 0px #D97706,
+                20px 0px #D97706,
+
+                /* Row 1 — head wide */
+                4px  4px #D97706,
+                8px  4px #D97706,
+                12px 4px #D97706,
+                16px 4px #D97706,
+                20px 4px #D97706,
+                24px 4px #D97706,
+
+                /* Row 2 — head wide */
+                4px  8px #D97706,
+                8px  8px #D97706,
+                12px 8px #D97706,
+                16px 8px #D97706,
+                20px 8px #D97706,
+                24px 8px #D97706,
+
+                /* Row 3 — eyes row */
+                4px  12px #D97706,
+                8px  12px #1a1d27,
+                12px 12px #1a1d27,
+                16px 12px #D97706,
+                20px 12px #1a1d27,
+                24px 12px #1a1d27,
+
+                /* Row 4 — cheeks / lower face */
+                4px  16px #D97706,
+                8px  16px #D97706,
+                12px 16px #D97706,
+                16px 16px #D97706,
+                20px 16px #D97706,
+                24px 16px #D97706,
+
+                /* Row 5 — body top */
+                4px  20px #C05500,
+                8px  20px #D97706,
+                12px 20px #D97706,
+                16px 20px #D97706,
+                20px 20px #D97706,
+                24px 20px #C05500,
+
+                /* Row 6 — body mid */
+                4px  24px #C05500,
+                8px  24px #D97706,
+                12px 24px #D97706,
+                16px 24px #D97706,
+                20px 24px #D97706,
+                24px 24px #C05500,
+
+                /* Row 7 — body low */
+                4px  28px #C05500,
+                8px  28px #D97706,
+                12px 28px #D97706,
+                16px 28px #D97706,
+                20px 28px #D97706,
+                24px 28px #C05500,
+
+                /* Row 8 — feet */
+                8px  32px #C05500,
+                12px 32px #C05500,
+                20px 32px #C05500,
+                24px 32px #C05500,
+
+                /* Row 9 — feet bottom */
+                8px  36px #0f1117,
+                12px 36px #0f1117,
+                20px 36px #0f1117,
+                24px 36px #0f1117;
+
+            animation: mascotBob 2s ease-in-out infinite;
+        }
+
+        /* Footer mascot: slightly different — uses green-tinted eyes for "rest" pose */
+        .mascot-pixel-footer {
+            width: 4px;
+            height: 4px;
+            position: relative;
+            image-rendering: pixelated;
+            display: inline-block;
+            flex-shrink: 0;
+            box-shadow:
+                /* Row 0 */
+                8px  0px #D97706,
+                12px 0px #D97706,
+                16px 0px #D97706,
+                20px 0px #D97706,
+                /* Row 1 */
+                4px  4px #D97706,
+                8px  4px #D97706,
+                12px 4px #D97706,
+                16px 4px #D97706,
+                20px 4px #D97706,
+                24px 4px #D97706,
+                /* Row 2 */
+                4px  8px #D97706,
+                8px  8px #D97706,
+                12px 8px #D97706,
+                16px 8px #D97706,
+                20px 8px #D97706,
+                24px 8px #D97706,
+                /* Row 3 — sleepy half-closed eyes */
+                4px  12px #D97706,
+                8px  12px #D97706,
+                12px 12px #1a1d27,
+                16px 12px #D97706,
+                20px 12px #D97706,
+                24px 12px #1a1d27,
+                /* Row 4 */
+                4px  16px #D97706,
+                8px  16px #D97706,
+                12px 16px #D97706,
+                16px 16px #D97706,
+                20px 16px #D97706,
+                24px 16px #D97706,
+                /* Row 5 */
+                4px  20px #C05500,
+                8px  20px #D97706,
+                12px 20px #D97706,
+                16px 20px #D97706,
+                20px 20px #D97706,
+                24px 20px #C05500,
+                /* Row 6 */
+                4px  24px #C05500,
+                8px  24px #D97706,
+                12px 24px #D97706,
+                16px 24px #D97706,
+                20px 24px #D97706,
+                24px 24px #C05500,
+                /* Row 7 */
+                4px  28px #C05500,
+                8px  28px #D97706,
+                12px 28px #D97706,
+                16px 28px #D97706,
+                20px 28px #D97706,
+                24px 28px #C05500,
+                /* Row 8 */
+                8px  32px #C05500,
+                12px 32px #C05500,
+                20px 32px #C05500,
+                24px 32px #C05500,
+                /* Row 9 */
+                8px  36px #0f1117,
+                12px 36px #0f1117,
+                20px 36px #0f1117,
+                24px 36px #0f1117;
+
+            animation: mascotBob 3s ease-in-out infinite reverse;
+        }
+
+        /* Idle bob: subtle vertical bounce */
+        @keyframes mascotBob {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-4px); }
+        }
+
+        /* Eye blink: override the eye shadow colour periodically */
+        @keyframes mascotBlink {
+            0%, 90%, 100% { opacity: 1; }
+            92%, 98%      { opacity: 0; }
+        }
+        .mascot-eyes {
+            position: absolute;
+            /* matches rows 3 positions exactly */
+            top: 12px;
+            left: 8px;
+            width: 20px;
+            height: 4px;
+            animation: mascotBlink 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        /* mascot wrapper to give it proper bounding box in the nav */
+        .mascot-wrap {
+            position: relative;
+            width: 32px;   /* 8 cols × 4px */
+            height: 44px;  /* 10 rows × 4px + small padding */
+            flex-shrink: 0;
+            display: flex;
+            align-items: flex-start;
+            padding-top: 2px;
+        }
+
+        /* ── body top padding to clear sticky nav ── */
+        body {
+            padding-top: 0;
+        }
+        .container {
+            padding-top: 0;
+        }
+        /* Add scroll margin to all sections */
+        .section {
+            scroll-margin-top: 72px;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 768px) {
             body { padding: 1rem; }
+            .sticky-nav {
+                margin-left: -1rem;
+                margin-right: -1rem;
+                padding: 0 0.75rem;
+                gap: 0.75rem;
+                height: 52px;
+            }
+            .nav-brand-text { font-size: 0.78rem; }
+            .nav-link { font-size: 0.72rem; padding: 0.3rem 0.55rem; }
+            .nav-timer .timer-total { display: none; }
             .header h1 { font-size: 1.6rem; }
             .domain-row { grid-template-columns: 1fr auto; }
             .domain-bar-wrap { display: none; }
@@ -700,6 +1034,31 @@
     </style>
 </head>
 <body>
+
+<!-- ── STICKY NAVIGATION BAR ── -->
+<nav class="sticky-nav" aria-label="Page navigation">
+    <a class="nav-brand" href="#" aria-label="CCA-F Study home">
+        <div class="mascot-wrap">
+            <div class="mascot-pixel" aria-hidden="true"></div>
+        </div>
+        <span class="nav-brand-text">CCA-F Study</span>
+    </a>
+
+    <div class="nav-links" role="list">
+        <button class="nav-link active" data-nav-target="section-overview" role="listitem">Overview</button>
+        <button class="nav-link" data-nav-target="section-rootcause" role="listitem">Root Cause</button>
+        <button class="nav-link" data-nav-target="section-priorities" role="listitem">Priorities</button>
+        <button class="nav-link" data-nav-target="section-insights" role="listitem">Cross-Domain</button>
+        <button class="nav-link" data-nav-target="section-projection" role="listitem">Projection</button>
+    </div>
+
+    <div class="nav-timer" aria-label="Study timer">
+        <span aria-hidden="true">&#x23F1;</span>
+        <span class="timer-display" id="sessionTimer">00:00</span>
+        <span class="timer-total" id="cumulativeTime"></span>
+    </div>
+</nav>
+
 <div class="container">
 
     <!-- ── HEADER ── -->
@@ -712,14 +1071,6 @@
             <div class="meta-item"><strong>Pass Threshold:</strong> 72%</div>
             <div class="meta-item"><strong>Target:</strong> 93% after 3 phases</div>
         </div>
-    </div>
-
-    <!-- ── SESSION TIMER ── -->
-    <div class="session-timer">
-        <span class="timer-icon">&#x23F1;</span>
-        <span>Study time this session:</span>
-        <span class="timer-display" id="sessionTimer">00:00</span>
-        <span class="timer-total" id="cumulativeTime"></span>
     </div>
 
     <!-- ── DOMAIN FILTER TABS ── -->
@@ -834,7 +1185,7 @@
 
 
     <!-- ── SECTION 2: ROOT CAUSE ANALYSIS ── -->
-    <div class="section">
+    <div class="section" id="section-rootcause">
         <div class="section-title">
             <span class="icon">&#x1F50D;</span>
             Section 2 &mdash; Root Cause Analysis
@@ -856,7 +1207,7 @@
 
 
     <!-- ── SECTION 3: PRIORITY STUDY PLAN ── -->
-    <div class="section">
+    <div class="section" id="section-priorities">
         <div class="section-title">
             <span class="icon">&#x1F3AF;</span>
             Section 3 &mdash; Priority Study Plan
@@ -1269,7 +1620,7 @@
 
 
     <!-- ── SECTION 5: PROJECTED IMPROVEMENT ── -->
-    <div class="section">
+    <div class="section" id="section-projection">
         <div class="section-title">
             <span class="icon">&#x1F4C8;</span>
             Section 5 &mdash; Projected Improvement
@@ -1398,7 +1749,12 @@
 
     <!-- ── FOOTER ── -->
     <div class="footer">
-        Generated 2026-04-01 by <code>/adaptive-study recommend</code> &nbsp;&middot;&nbsp; Huiyan Wan
+        <div style="display:flex; align-items:center; justify-content:center; gap:0.75rem; flex-wrap:wrap;">
+            <div class="mascot-wrap" style="height:44px;">
+                <div class="mascot-pixel-footer" aria-hidden="true"></div>
+            </div>
+            <span>Generated 2026-04-01 by <code>/adaptive-study recommend</code> &nbsp;&middot;&nbsp; Huiyan Wan</span>
+        </div>
     </div>
 
 </div><!-- /container -->
@@ -1674,7 +2030,66 @@
     applyChecklistState();
 
     /* ────────────────────────────────────────────
-       9. Resource link visit tracking
+       9. Sticky nav — smooth scroll + active highlighting
+    ──────────────────────────────────────────── */
+    const navLinks = document.querySelectorAll('.nav-link[data-nav-target]');
+
+    // Smooth scroll to section on click
+    navLinks.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-nav-target');
+            const targetEl = document.getElementById(targetId);
+            if (!targetEl) return;
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Intersection Observer — mark nav link active when its section enters view
+    const sectionIds = ['section-overview', 'section-rootcause', 'section-priorities', 'section-insights', 'section-projection'];
+    const navLinkMap = {};
+    navLinks.forEach(btn => {
+        navLinkMap[btn.getAttribute('data-nav-target')] = btn;
+    });
+
+    // Track which sections are currently intersecting
+    const intersecting = new Set();
+
+    function updateActiveNav() {
+        // Find the topmost intersecting section in document order
+        let activeId = null;
+        for (const id of sectionIds) {
+            if (intersecting.has(id)) { activeId = id; break; }
+        }
+        navLinks.forEach(btn => btn.classList.remove('active'));
+        if (activeId && navLinkMap[activeId]) {
+            navLinkMap[activeId].classList.add('active');
+        }
+    }
+
+    const navObserver = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    intersecting.add(entry.target.id);
+                } else {
+                    intersecting.delete(entry.target.id);
+                }
+            });
+            updateActiveNav();
+        },
+        {
+            rootMargin: '-60px 0px -40% 0px',
+            threshold: 0
+        }
+    );
+
+    sectionIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) navObserver.observe(el);
+    });
+
+    /* ────────────────────────────────────────────
+       10. Resource link visit tracking
     ──────────────────────────────────────────── */
     const visitedLinks = lsGet(LS_LINKS) ?? {};
 
