@@ -126,6 +126,8 @@
         .domain-bar-fill {
             height: 100%;
             border-radius: 4px;
+            width: 0%;
+            transition: width 1.5s ease-out;
         }
         .bar-pass-label {
             font-size: 0.7rem;
@@ -184,6 +186,7 @@
             border-radius: 16px;
             overflow: hidden;
             margin-bottom: 1.5rem;
+            scroll-margin-top: 80px;
         }
         .priority-header {
             padding: 1.1rem 1.5rem;
@@ -191,6 +194,12 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+        .priority-header:hover {
+            background: rgba(255,255,255,0.03);
         }
         .priority-header-left { display: flex; align-items: center; gap: 0.75rem; }
         .priority-num {
@@ -214,8 +223,45 @@
             text-align: right;
             font-size: 0.8rem;
             color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .priority-meta-score {
+            text-align: right;
         }
         .priority-meta strong { display: block; font-size: 1rem; font-weight: 700; }
+
+        /* Chevron toggle */
+        .chevron {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: transform 0.3s ease, color 0.2s ease;
+            flex-shrink: 0;
+        }
+        .chevron svg {
+            width: 16px;
+            height: 16px;
+        }
+        .priority-card.collapsed .chevron {
+            transform: rotate(-90deg);
+        }
+
+        /* Collapsible body */
+        .priority-body {
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            max-height: 2000px;
+            opacity: 1;
+        }
+        .priority-card.collapsed .priority-body {
+            max-height: 0;
+            opacity: 0;
+        }
 
         .subtopic-list { padding: 0; }
         .subtopic-row {
@@ -223,8 +269,20 @@
             grid-template-columns: 1fr 1fr 1fr;
             gap: 0;
             border-bottom: 1px solid var(--border);
+            position: relative;
+            transition: background 0.2s ease;
         }
         .subtopic-row:last-child { border-bottom: none; }
+        .subtopic-row:hover {
+            background: rgba(255,255,255,0.025);
+        }
+        .subtopic-row.studied {
+            opacity: 0.65;
+        }
+        .subtopic-row.studied .cell-title {
+            text-decoration: line-through;
+            color: var(--green);
+        }
         .subtopic-cell {
             padding: 1rem 1.5rem;
             font-size: 0.85rem;
@@ -247,6 +305,14 @@
             font-size: 0.82rem;
         }
         .subtopic-cell a:hover { text-decoration: underline; }
+        .subtopic-cell a.link-visited {
+            color: var(--text-muted);
+        }
+        .subtopic-cell a.link-visited::after {
+            content: ' \2713';
+            color: var(--green);
+            font-size: 0.75rem;
+        }
         .subtopic-cell .link-row {
             display: flex;
             flex-direction: column;
@@ -255,6 +321,56 @@
         .subtopic-cell .exercise-text {
             font-size: 0.82rem;
             color: var(--text-muted);
+        }
+
+        /* Study checkbox */
+        .subtopic-row-inner {
+            display: contents;
+        }
+        .subtopic-check-wrap {
+            position: absolute;
+            top: 50%;
+            right: -2px;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+        }
+        .study-check {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            background: transparent;
+            cursor: pointer;
+            position: absolute;
+            top: 0.85rem;
+            left: 0.75rem;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            flex-shrink: 0;
+        }
+        .study-check:hover {
+            border-color: var(--green);
+        }
+        .study-check:checked {
+            background: var(--green);
+            border-color: var(--green);
+        }
+        .study-check:checked::after {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 8px;
+            border: 2px solid var(--bg);
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg) translate(1px, -1px);
+            margin: 0 auto;
+        }
+        /* shift first cell content right to make room for checkbox */
+        .subtopic-row .subtopic-cell:first-child {
+            padding-left: 2.75rem;
         }
 
         .priority-footer {
@@ -266,6 +382,8 @@
             justify-content: space-between;
             font-size: 0.82rem;
             color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         .priority-footer strong { color: var(--green); }
 
@@ -331,19 +449,21 @@
         .traj-bar-base {
             position: absolute;
             top: 0; left: 0;
-            width: 63%;
+            width: 0%;
             height: 100%;
             background: linear-gradient(90deg, rgba(251,191,36,0.35) 0%, rgba(251,191,36,0.5) 100%);
             border-radius: 8px 0 0 8px;
+            transition: width 1s ease-out 0.2s;
         }
         .traj-bar-gain {
             position: absolute;
             top: 0;
             left: 63%;
-            width: 30%;   /* 63% → 93% = 30 pct points across remaining 37% of bar */
+            width: 0%;
             height: 100%;
             background: linear-gradient(90deg, rgba(74,222,128,0.4) 0%, rgba(74,222,128,0.65) 100%);
             border-radius: 0 8px 8px 0;
+            transition: width 1s ease-out 0.8s;
         }
         /* pass line at 72% */
         .traj-pass-line {
@@ -354,6 +474,11 @@
             width: 2px;
             background: var(--rose);
             border-radius: 2px;
+            animation: passLinePulse 2.5s ease-in-out infinite;
+        }
+        @keyframes passLinePulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(251,113,133,0); }
+            50%       { opacity: 0.8; box-shadow: 0 0 6px 3px rgba(251,113,133,0.25); }
         }
         .traj-pass-line::after {
             content: '72% pass';
@@ -420,6 +545,147 @@
             color: var(--accent);
         }
 
+        /* ── Domain filter tabs ── */
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding: 0.85rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            align-items: center;
+        }
+        .filter-bar-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-right: 0.25rem;
+        }
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 0.35rem 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            font-family: inherit;
+            line-height: 1.4;
+        }
+        .filter-btn:hover {
+            background: var(--surface-2);
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        .filter-btn.active {
+            background: var(--accent-dim);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .filter-btn.btn-d3 { --f-color: var(--rose); --f-dim: var(--rose-dim); }
+        .filter-btn.btn-d2 { --f-color: var(--amber); --f-dim: var(--amber-dim); }
+        .filter-btn.btn-d1 { --f-color: var(--blue);  --f-dim: var(--blue-dim); }
+        .filter-btn.btn-d4 { --f-color: var(--green); --f-dim: var(--green-dim); }
+        .filter-btn.btn-d5 { --f-color: var(--cyan);  --f-dim: var(--cyan-dim); }
+        .filter-btn.btn-d3:hover, .filter-btn.btn-d3.active { background: var(--f-dim); border-color: var(--f-color); color: var(--f-color); }
+        .filter-btn.btn-d2:hover, .filter-btn.btn-d2.active { background: var(--f-dim); border-color: var(--f-color); color: var(--f-color); }
+        .filter-btn.btn-d1:hover, .filter-btn.btn-d1.active { background: var(--f-dim); border-color: var(--f-color); color: var(--f-color); }
+        .filter-btn.btn-d4:hover, .filter-btn.btn-d4.active { background: var(--f-dim); border-color: var(--f-color); color: var(--f-color); }
+        .filter-btn.btn-d5:hover, .filter-btn.btn-d5.active { background: var(--f-dim); border-color: var(--f-color); color: var(--f-color); }
+
+        /* highlight on filter click */
+        .priority-card.filter-highlight {
+            box-shadow: 0 0 0 2px var(--accent);
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* ── Session timer ── */
+        .session-timer {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .session-timer .timer-icon {
+            font-size: 1rem;
+        }
+        .session-timer .timer-display {
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            color: var(--cyan);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.03em;
+        }
+        .session-timer .timer-total {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Completion counter ── */
+        .completion-counter {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .completion-counter .count-val {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        /* ── Tooltip ── */
+        .tooltip {
+            position: fixed;
+            z-index: 1000;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem 0.9rem;
+            font-size: 0.78rem;
+            color: var(--text);
+            max-width: 300px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            line-height: 1.45;
+        }
+        .tooltip.visible { opacity: 1; }
+        .tooltip .tooltip-q {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        /* ── D4/D5 info cards ── */
+        .info-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            scroll-margin-top: 80px;
+        }
+        .info-card-header {
+            padding: 1.1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .info-card-header-left { display: flex; align-items: center; gap: 0.75rem; }
+
         /* ── Responsive ── */
         @media (max-width: 768px) {
             body { padding: 1rem; }
@@ -429,6 +695,7 @@
             .subtopic-row { grid-template-columns: 1fr; }
             .subtopic-cell { border-right: none; border-bottom: 1px solid var(--border); }
             .subtopic-cell:last-child { border-bottom: none; }
+            .filter-bar { gap: 0.4rem; }
         }
     </style>
 </head>
@@ -447,16 +714,35 @@
         </div>
     </div>
 
+    <!-- ── SESSION TIMER ── -->
+    <div class="session-timer">
+        <span class="timer-icon">&#x23F1;</span>
+        <span>Study time this session:</span>
+        <span class="timer-display" id="sessionTimer">00:00</span>
+        <span class="timer-total" id="cumulativeTime"></span>
+    </div>
+
+    <!-- ── DOMAIN FILTER TABS ── -->
+    <div class="filter-bar">
+        <span class="filter-bar-label">Jump to:</span>
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn btn-d3" data-filter="d3">D3 Critical</button>
+        <button class="filter-btn btn-d2" data-filter="d2">D2 Weak</button>
+        <button class="filter-btn btn-d1" data-filter="d1">D1 Moderate</button>
+        <button class="filter-btn btn-d4" data-filter="d4">D4 Strong</button>
+        <button class="filter-btn btn-d5" data-filter="d5">D5 Perfect</button>
+    </div>
+
 
     <!-- ── SECTION 1: SCORE OVERVIEW ── -->
-    <div class="section">
+    <div class="section" id="section-overview">
         <div class="section-title">
             <span class="icon">&#x1F4CA;</span>
             Section 1 &mdash; Score Overview
         </div>
 
         <!-- D1 -->
-        <div class="domain-row">
+        <div class="domain-row" id="overview-d1">
             <div class="domain-left">
                 <div class="domain-name">
                     D1: Agentic Architecture
@@ -466,7 +752,7 @@
             </div>
             <div class="domain-bar-wrap">
                 <div class="domain-bar">
-                    <div class="domain-bar-fill" style="width:63%; background: var(--amber);"></div>
+                    <div class="domain-bar-fill" data-target="63" style="background: var(--amber);"></div>
                 </div>
                 <div class="bar-pass-label">Pass line at 72%</div>
             </div>
@@ -474,7 +760,7 @@
         </div>
 
         <!-- D2 -->
-        <div class="domain-row">
+        <div class="domain-row" id="overview-d2">
             <div class="domain-left">
                 <div class="domain-name">
                     D2: Tool Design &amp; MCP
@@ -484,7 +770,7 @@
             </div>
             <div class="domain-bar-wrap">
                 <div class="domain-bar">
-                    <div class="domain-bar-fill" style="width:50%; background: var(--rose);"></div>
+                    <div class="domain-bar-fill" data-target="50" style="background: var(--rose);"></div>
                 </div>
                 <div class="bar-pass-label">Pass line at 72%</div>
             </div>
@@ -492,7 +778,7 @@
         </div>
 
         <!-- D3 -->
-        <div class="domain-row" style="border-color: rgba(251,113,133,0.4); box-shadow: 0 0 0 1px rgba(251,113,133,0.15);">
+        <div class="domain-row" id="overview-d3" style="border-color: rgba(251,113,133,0.4); box-shadow: 0 0 0 1px rgba(251,113,133,0.15);">
             <div class="domain-left">
                 <div class="domain-name">
                     D3: Claude Code Config
@@ -502,7 +788,7 @@
             </div>
             <div class="domain-bar-wrap">
                 <div class="domain-bar">
-                    <div class="domain-bar-fill" style="width:33%; background: var(--rose);"></div>
+                    <div class="domain-bar-fill" data-target="33" style="background: var(--rose);"></div>
                 </div>
                 <div class="bar-pass-label">Pass line at 72%</div>
             </div>
@@ -510,7 +796,7 @@
         </div>
 
         <!-- D4 -->
-        <div class="domain-row">
+        <div class="domain-row" id="overview-d4">
             <div class="domain-left">
                 <div class="domain-name">
                     D4: Prompt Engineering
@@ -520,7 +806,7 @@
             </div>
             <div class="domain-bar-wrap">
                 <div class="domain-bar">
-                    <div class="domain-bar-fill" style="width:83%; background: var(--green);"></div>
+                    <div class="domain-bar-fill" data-target="83" style="background: var(--green);"></div>
                 </div>
                 <div class="bar-pass-label">Pass line at 72%</div>
             </div>
@@ -528,7 +814,7 @@
         </div>
 
         <!-- D5 -->
-        <div class="domain-row">
+        <div class="domain-row" id="overview-d5">
             <div class="domain-left">
                 <div class="domain-name">
                     D5: Context Management
@@ -538,7 +824,7 @@
             </div>
             <div class="domain-bar-wrap">
                 <div class="domain-bar">
-                    <div class="domain-bar-fill" style="width:100%; background: var(--green);"></div>
+                    <div class="domain-bar-fill" data-target="100" style="background: var(--green);"></div>
                 </div>
                 <div class="bar-pass-label">Pass line at 72%</div>
             </div>
@@ -576,9 +862,14 @@
             Section 3 &mdash; Priority Study Plan
         </div>
 
+        <!-- Completion counter -->
+        <div style="margin-bottom:1rem;">
+            <span class="completion-counter"><span class="count-val" id="studiedCount">0</span>/<span id="totalCount">10</span> sub-topics studied</span>
+        </div>
+
         <!-- ── PRIORITY 1: D3 ── -->
-        <div class="priority-card">
-            <div class="priority-header" style="border-left: 4px solid var(--rose);">
+        <div class="priority-card" id="card-d3" data-domain="d3">
+            <div class="priority-header" style="border-left: 4px solid var(--rose);" data-card="card-d3">
                 <div class="priority-header-left">
                     <div class="priority-num" style="background: var(--rose-dim); color: var(--rose);">1</div>
                     <div>
@@ -587,103 +878,128 @@
                     </div>
                 </div>
                 <div class="priority-meta">
-                    <strong style="color:var(--rose);">33%</strong>
-                    Current score
+                    <div class="priority-meta-score">
+                        <strong style="color:var(--rose);">33%</strong>
+                        Current score
+                    </div>
+                    <div class="chevron">
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 6 8 10 12 6"></polyline>
+                        </svg>
+                    </div>
                 </div>
             </div>
 
-            <div class="subtopic-list">
+            <div class="priority-body">
+                <div class="subtopic-list">
 
-                <!-- Sub-topic 1 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">CLAUDE.md hierarchy</div>
-                        <div class="cell-body">Thought files load with precedence; they actually accumulate and concatenate from global &#8594; project &#8594; sub-folder.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">How CLAUDE.md files load &rarr;</a>
-                            <a href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank" rel="noopener">Course: Claude Code in Action &rarr;</a>
+                    <!-- Sub-topic 1 -->
+                    <div class="subtopic-row"
+                         data-key="d3-1"
+                         data-tooltip-q="Q15"
+                         data-tooltip-text="What is the precedence order when CLAUDE.md files conflict?">
+                        <input type="checkbox" class="study-check" data-key="d3-1">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">CLAUDE.md hierarchy</div>
+                            <div class="cell-body">Thought files load with precedence; they actually accumulate and concatenate from global &#8594; project &#8594; sub-folder.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener" data-link-key="link-d3-1-1">How CLAUDE.md files load &rarr;</a>
+                                <a href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank" rel="noopener" data-link-key="link-d3-1-2">Course: Claude Code in Action &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Create CLAUDE.md at <code>~/</code>, <code>~/project/</code>, and <code>~/project/src/</code>. Run Claude Code in each folder. Verify which instructions appear together.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Create CLAUDE.md at <code>~/</code>, <code>~/project/</code>, and <code>~/project/src/</code>. Run Claude Code in each folder. Verify which instructions appear together.</div>
-                    </div>
-                </div>
 
-                <!-- Sub-topic 2 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">allowed-tools location</div>
-                        <div class="cell-body">Assumed it lives in <code>settings.json</code>; it is declared in <strong>SKILL.md frontmatter YAML</strong> under the <code>allowed-tools</code> key.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Frontmatter reference &rarr;</a>
-                            <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">Configuration scopes &rarr;</a>
+                    <!-- Sub-topic 2 -->
+                    <div class="subtopic-row"
+                         data-key="d3-2"
+                         data-tooltip-q="Q18"
+                         data-tooltip-text="Where is the allowed-tools key declared &mdash; settings.json or SKILL.md frontmatter?">
+                        <input type="checkbox" class="study-check" data-key="d3-2">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">allowed-tools location</div>
+                            <div class="cell-body">Assumed it lives in <code>settings.json</code>; it is declared in <strong>SKILL.md frontmatter YAML</strong> under the <code>allowed-tools</code> key.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener" data-link-key="link-d3-2-1">Frontmatter reference &rarr;</a>
+                                <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener" data-link-key="link-d3-2-2">Configuration scopes &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Write a minimal SKILL.md with <code>allowed-tools: [Bash, Read]</code>. Test that Write is blocked. Then add Write and confirm it becomes available.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Write a minimal SKILL.md with <code>allowed-tools: [Bash, Read]</code>. Test that Write is blocked. Then add Write and confirm it becomes available.</div>
-                    </div>
-                </div>
 
-                <!-- Sub-topic 3 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">Sharing config across team</div>
-                        <div class="cell-body">The correct pattern is to commit <code>CLAUDE.md</code> + <code>.claude/settings.json</code> to the repo root so all collaborators inherit the same context.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">Configuration scopes &rarr;</a>
+                    <!-- Sub-topic 3 -->
+                    <div class="subtopic-row"
+                         data-key="d3-3"
+                         data-tooltip-q="Q22"
+                         data-tooltip-text="What is the correct way to share Claude Code config across a team in a monorepo?">
+                        <input type="checkbox" class="study-check" data-key="d3-3">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">Sharing config across team</div>
+                            <div class="cell-body">The correct pattern is to commit <code>CLAUDE.md</code> + <code>.claude/settings.json</code> to the repo root so all collaborators inherit the same context.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener" data-link-key="link-d3-3-1">Configuration scopes &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Check your own repo. Locate (or create) <code>.claude/settings.json</code>. Confirm it is tracked in git, not listed in <code>.gitignore</code>.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Check your own repo. Locate (or create) <code>.claude/settings.json</code>. Confirm it is tracked in git, not listed in <code>.gitignore</code>.</div>
-                    </div>
-                </div>
 
-                <!-- Sub-topic 4 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">Token reduction via CLAUDE.md</div>
-                        <div class="cell-body">CLAUDE.md is a context-injection file; it cannot set API parameters such as <code>max_tokens</code>. Token limits are API-level controls only.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">Memory &amp; CLAUDE.md scope &rarr;</a>
+                    <!-- Sub-topic 4 -->
+                    <div class="subtopic-row"
+                         data-key="d3-4"
+                         data-tooltip-q="Q26"
+                         data-tooltip-text="Can CLAUDE.md be used to set max_tokens for API calls?">
+                        <input type="checkbox" class="study-check" data-key="d3-4">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">Token reduction via CLAUDE.md</div>
+                            <div class="cell-body">CLAUDE.md is a context-injection file; it cannot set API parameters such as <code>max_tokens</code>. Token limits are API-level controls only.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener" data-link-key="link-d3-4-1">Memory &amp; CLAUDE.md scope &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Try adding <code>max_tokens: 1024</code> to a CLAUDE.md. Observe that it is treated as plain text instruction, not an API parameter override.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Try adding <code>max_tokens: 1024</code> to a CLAUDE.md. Observe that it is treated as plain text instruction, not an API parameter override.</div>
-                    </div>
+
                 </div>
 
-            </div>
-
-            <div class="priority-footer">
-                <span>Estimated time: <strong>30 min</strong></span>
-                <span>Expected gain: <strong>+13%</strong> &rarr; score reaches ~76% (above pass threshold)</span>
+                <div class="priority-footer">
+                    <span>Estimated time: <strong>30 min</strong></span>
+                    <span>Expected gain: <strong>+13%</strong> &rarr; score reaches ~76% (above pass threshold)</span>
+                </div>
             </div>
         </div>
 
 
         <!-- ── PRIORITY 2: D2 ── -->
-        <div class="priority-card">
-            <div class="priority-header" style="border-left: 4px solid var(--amber);">
+        <div class="priority-card" id="card-d2" data-domain="d2">
+            <div class="priority-header" style="border-left: 4px solid var(--amber);" data-card="card-d2">
                 <div class="priority-header-left">
                     <div class="priority-num" style="background: var(--amber-dim); color: var(--amber);">2</div>
                     <div>
@@ -692,88 +1008,109 @@
                     </div>
                 </div>
                 <div class="priority-meta">
-                    <strong style="color:var(--amber);">50%</strong>
-                    Current score
+                    <div class="priority-meta-score">
+                        <strong style="color:var(--amber);">50%</strong>
+                        Current score
+                    </div>
+                    <div class="chevron">
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 6 8 10 12 6"></polyline>
+                        </svg>
+                    </div>
                 </div>
             </div>
 
-            <div class="subtopic-list">
+            <div class="priority-body">
+                <div class="subtopic-list">
 
-                <!-- Sub-topic 1 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">Three MCP primitives</div>
-                        <div class="cell-body">
-                            <strong>Tools</strong> &mdash; model-controlled actions.<br>
-                            <strong>Resources</strong> &mdash; app-controlled read-only data.<br>
-                            <strong>Prompts</strong> &mdash; user-controlled templates.
+                    <!-- Sub-topic 1 -->
+                    <div class="subtopic-row"
+                         data-key="d2-1"
+                         data-tooltip-q="Q7"
+                         data-tooltip-text="Which MCP primitive is controlled by the application, not the model?">
+                        <input type="checkbox" class="study-check" data-key="d2-1">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">Three MCP primitives</div>
+                            <div class="cell-body">
+                                <strong>Tools</strong> &mdash; model-controlled actions.<br>
+                                <strong>Resources</strong> &mdash; app-controlled read-only data.<br>
+                                <strong>Prompts</strong> &mdash; user-controlled templates.
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://modelcontextprotocol.io/docs/learn/architecture" target="_blank" rel="noopener" data-link-key="link-d2-1-1">MCP architecture overview &rarr;</a>
+                                <a href="https://anthropic.skilljar.com/introduction-to-model-context-protocol" target="_blank" rel="noopener" data-link-key="link-d2-1-2">Course: Intro to MCP &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Draw a 3-column table labelling who controls each primitive (model / app / user) and give one real-world example per column.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://modelcontextprotocol.io/docs/learn/architecture" target="_blank" rel="noopener">MCP architecture overview &rarr;</a>
-                            <a href="https://anthropic.skilljar.com/introduction-to-model-context-protocol" target="_blank" rel="noopener">Course: Intro to MCP &rarr;</a>
+
+                    <!-- Sub-topic 2 -->
+                    <div class="subtopic-row"
+                         data-key="d2-2"
+                         data-tooltip-q="Q11"
+                         data-tooltip-text="A server exposes a read-only file listing endpoint. Is this a Resource or a Tool?">
+                        <input type="checkbox" class="study-check" data-key="d2-2">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">Resource vs Tool</div>
+                            <div class="cell-body">Resources expose read-only data the application decides when to surface. Tools are executable actions the model decides when to invoke.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://modelcontextprotocol.io/docs/concepts/resources" target="_blank" rel="noopener" data-link-key="link-d2-2-1">MCP Resources concept &rarr;</a>
+                                <a href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener" data-link-key="link-d2-2-2">MCP in Claude Code &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Given: "fetch a database row" and "display the current file tree" &mdash; classify each as Resource or Tool and justify your answer.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Draw a 3-column table labelling who controls each primitive (model / app / user) and give one real-world example per column.</div>
+
+                    <!-- Sub-topic 3 -->
+                    <div class="subtopic-row"
+                         data-key="d2-3"
+                         data-tooltip-q="Q19"
+                         data-tooltip-text="Can you register a new MCP server without restarting the Claude Code session?">
+                        <input type="checkbox" class="study-check" data-key="d2-3">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">Mid-session server limitation</div>
+                            <div class="cell-body">New MCP servers cannot be hot-loaded into a running session. The session must be restarted for a newly registered server to become available.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://anthropic.skilljar.com/model-context-protocol-advanced-topics" target="_blank" rel="noopener" data-link-key="link-d2-3-1">Course: MCP Advanced Topics &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Add a new MCP server to <code>.claude/settings.json</code> while a Claude Code session is open. Confirm the server is unavailable until restart.</div>
+                        </div>
                     </div>
+
                 </div>
 
-                <!-- Sub-topic 2 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">Resource vs Tool</div>
-                        <div class="cell-body">Resources expose read-only data the application decides when to surface. Tools are executable actions the model decides when to invoke.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://modelcontextprotocol.io/docs/concepts/resources" target="_blank" rel="noopener">MCP Resources concept &rarr;</a>
-                            <a href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">MCP in Claude Code &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Given: "fetch a database row" and "display the current file tree" &mdash; classify each as Resource or Tool and justify your answer.</div>
-                    </div>
+                <div class="priority-footer">
+                    <span>Estimated time: <strong>40 min</strong></span>
+                    <span>Expected gain: <strong>+10%</strong> &rarr; cumulative score ~86%</span>
                 </div>
-
-                <!-- Sub-topic 3 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">Mid-session server limitation</div>
-                        <div class="cell-body">New MCP servers cannot be hot-loaded into a running session. The session must be restarted for a newly registered server to become available.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://anthropic.skilljar.com/model-context-protocol-advanced-topics" target="_blank" rel="noopener">Course: MCP Advanced Topics &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Add a new MCP server to <code>.claude/settings.json</code> while a Claude Code session is open. Confirm the server is unavailable until restart.</div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="priority-footer">
-                <span>Estimated time: <strong>40 min</strong></span>
-                <span>Expected gain: <strong>+10%</strong> &rarr; cumulative score ~86%</span>
             </div>
         </div>
 
 
         <!-- ── PRIORITY 3: D1 ── -->
-        <div class="priority-card">
-            <div class="priority-header" style="border-left: 4px solid var(--blue);">
+        <div class="priority-card" id="card-d1" data-domain="d1">
+            <div class="priority-header" style="border-left: 4px solid var(--blue);" data-card="card-d1">
                 <div class="priority-header-left">
                     <div class="priority-num" style="background: var(--blue-dim); color: var(--blue);">3</div>
                     <div>
@@ -782,75 +1119,96 @@
                     </div>
                 </div>
                 <div class="priority-meta">
-                    <strong style="color:var(--blue);">63%</strong>
-                    Current score
+                    <div class="priority-meta-score">
+                        <strong style="color:var(--blue);">63%</strong>
+                        Current score
+                    </div>
+                    <div class="chevron">
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 6 8 10 12 6"></polyline>
+                        </svg>
+                    </div>
                 </div>
             </div>
 
-            <div class="subtopic-list">
+            <div class="priority-body">
+                <div class="subtopic-list">
 
-                <!-- Sub-topic 1 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">Parallel execution</div>
-                        <div class="cell-body">Emit multiple <code>Task</code> calls in a single model response. <code>allowedTools</code> must explicitly include <code>"Task"</code> for this to work.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Skills &amp; Task tool reference &rarr;</a>
+                    <!-- Sub-topic 1 -->
+                    <div class="subtopic-row"
+                         data-key="d1-1"
+                         data-tooltip-q="Q4"
+                         data-tooltip-text="How do you emit multiple Task calls in a single model turn for parallel execution?">
+                        <input type="checkbox" class="study-check" data-key="d1-1">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">Parallel execution</div>
+                            <div class="cell-body">Emit multiple <code>Task</code> calls in a single model response. <code>allowedTools</code> must explicitly include <code>"Task"</code> for this to work.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener" data-link-key="link-d1-1-1">Skills &amp; Task tool reference &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Write a SKILL.md that spawns two parallel sub-agents. Confirm both complete concurrently by checking log timestamps.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Write a SKILL.md that spawns two parallel sub-agents. Confirm both complete concurrently by checking log timestamps.</div>
-                    </div>
-                </div>
 
-                <!-- Sub-topic 2 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">allowedTools enforcement</div>
-                        <div class="cell-body">When a tool is not listed in <code>allowedTools</code>, the call is <strong>blocked outright</strong> &mdash; not degraded or substituted with a fallback.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">Configuration scopes &rarr;</a>
+                    <!-- Sub-topic 2 -->
+                    <div class="subtopic-row"
+                         data-key="d1-2"
+                         data-tooltip-q="Q9"
+                         data-tooltip-text="What happens when a tool call is made for a tool not listed in allowedTools?">
+                        <input type="checkbox" class="study-check" data-key="d1-2">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">allowedTools enforcement</div>
+                            <div class="cell-body">When a tool is not listed in <code>allowedTools</code>, the call is <strong>blocked outright</strong> &mdash; not degraded or substituted with a fallback.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener" data-link-key="link-d1-2-1">Configuration scopes &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Exclude <code>Write</code> from <code>allowedTools</code> in a skill. Ask Claude Code to create a file. Observe the blocked error rather than a graceful fallback.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Exclude <code>Write</code> from <code>allowedTools</code> in a skill. Ask Claude Code to create a file. Observe the blocked error rather than a graceful fallback.</div>
-                    </div>
-                </div>
 
-                <!-- Sub-topic 3 -->
-                <div class="subtopic-row">
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Sub-topic</div>
-                        <div class="cell-title">Dependency detection</div>
-                        <div class="cell-body">The system does <strong>not</strong> auto-detect task dependencies. The coordinator agent must explicitly sequence dependent tasks.</div>
-                    </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Study Resource</div>
-                        <div class="link-row">
-                            <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Agentic orchestration guide &rarr;</a>
+                    <!-- Sub-topic 3 -->
+                    <div class="subtopic-row"
+                         data-key="d1-3"
+                         data-tooltip-q="Q13"
+                         data-tooltip-text="Does Claude Code automatically detect task dependencies in a multi-agent flow?">
+                        <input type="checkbox" class="study-check" data-key="d1-3">
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Sub-topic</div>
+                            <div class="cell-title">Dependency detection</div>
+                            <div class="cell-body">The system does <strong>not</strong> auto-detect task dependencies. The coordinator agent must explicitly sequence dependent tasks.</div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Study Resource</div>
+                            <div class="link-row">
+                                <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener" data-link-key="link-d1-3-1">Agentic orchestration guide &rarr;</a>
+                            </div>
+                        </div>
+                        <div class="subtopic-cell">
+                            <div class="cell-label">Hands-on Exercise</div>
+                            <div class="exercise-text">Design a two-step agentic flow where step 2 depends on step 1's output. Write the coordinator prompt that forces sequential execution.</div>
                         </div>
                     </div>
-                    <div class="subtopic-cell">
-                        <div class="cell-label">Hands-on Exercise</div>
-                        <div class="exercise-text">Design a two-step agentic flow where step 2 depends on step 1's output. Write the coordinator prompt that forces sequential execution.</div>
-                    </div>
+
                 </div>
 
-            </div>
-
-            <div class="priority-footer">
-                <span>Estimated time: <strong>40 min</strong></span>
-                <span>Expected gain: <strong>+7%</strong> &rarr; cumulative score ~93%</span>
+                <div class="priority-footer">
+                    <span>Estimated time: <strong>40 min</strong></span>
+                    <span>Expected gain: <strong>+7%</strong> &rarr; cumulative score ~93%</span>
+                </div>
             </div>
         </div>
 
@@ -858,10 +1216,42 @@
 
 
     <!-- ── SECTION 4: CROSS-DOMAIN INSIGHTS ── -->
-    <div class="section">
+    <div class="section" id="section-insights">
         <div class="section-title">
             <span class="icon">&#x1F517;</span>
             Section 4 &mdash; Cross-Domain Insights
+        </div>
+
+        <!-- D4 info card (shown when D4 filter active) -->
+        <div class="info-card" id="card-d4" data-domain="d4" style="display:none;">
+            <div class="info-card-header" style="border-left: 4px solid var(--green);">
+                <div class="info-card-header-left">
+                    <div class="priority-num" style="background: var(--green-dim); color: var(--green);">D4</div>
+                    <div>
+                        <h3>D4 &mdash; Prompt Engineering</h3>
+                        <div class="domain-tag">83% baseline &middot; weight 20% &middot; above pass threshold</div>
+                    </div>
+                </div>
+                <div class="priority-meta">
+                    <strong style="color:var(--green);">Strong</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- D5 info card (shown when D5 filter active) -->
+        <div class="info-card" id="card-d5" data-domain="d5" style="display:none;">
+            <div class="info-card-header" style="border-left: 4px solid var(--cyan);">
+                <div class="info-card-header-left">
+                    <div class="priority-num" style="background: var(--cyan-dim); color: var(--cyan);">D5</div>
+                    <div>
+                        <h3>D5 &mdash; Context Management</h3>
+                        <div class="domain-tag">100% baseline &middot; weight 15% &middot; perfect score</div>
+                    </div>
+                </div>
+                <div class="priority-meta">
+                    <strong style="color:var(--cyan);">Perfect</strong>
+                </div>
+            </div>
         </div>
 
         <div class="callout callout-cyan">
@@ -963,8 +1353,8 @@
 
             <!-- bar -->
             <div class="traj-bar-outer">
-                <div class="traj-bar-base"></div>
-                <div class="traj-bar-gain"></div>
+                <div class="traj-bar-base" id="trajBase"></div>
+                <div class="traj-bar-gain" id="trajGain"></div>
                 <!-- pass line at 72% -->
                 <div class="traj-pass-line"></div>
                 <!-- start dot -->
@@ -1012,5 +1402,303 @@
     </div>
 
 </div><!-- /container -->
+
+<!-- ── Tooltip element ── -->
+<div class="tooltip" id="tooltip">
+    <div class="tooltip-q" id="tooltipQ"></div>
+    <div id="tooltipText"></div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ────────────────────────────────────────────
+       1. localStorage helpers
+    ──────────────────────────────────────────── */
+    const LS_CHECKLIST   = 'ccaf-study-checklist';
+    const LS_LINKS       = 'ccaf-visited-links';
+    const LS_TOTAL_TIME  = 'ccaf-total-study-seconds';
+
+    function lsGet(key) {
+        try { return JSON.parse(localStorage.getItem(key)) ?? null; } catch { return null; }
+    }
+    function lsSet(key, val) {
+        try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* quota */ }
+    }
+
+    /* ────────────────────────────────────────────
+       2. Session timer
+    ──────────────────────────────────────────── */
+    const timerEl      = document.getElementById('sessionTimer');
+    const cumulEl      = document.getElementById('cumulativeTime');
+    let sessionSeconds = 0;
+    let timerInterval  = null;
+    let pageVisible    = true;
+
+    function fmtTime(s) {
+        const m = Math.floor(s / 60).toString().padStart(2, '0');
+        const sec = (s % 60).toString().padStart(2, '0');
+        return `${m}:${sec}`;
+    }
+
+    function updateTimerDisplay() {
+        timerEl.textContent = fmtTime(sessionSeconds);
+        const total = (lsGet(LS_TOTAL_TIME) ?? 0) + sessionSeconds;
+        const totalMin = Math.round(total / 60);
+        cumulEl.textContent = totalMin > 0
+            ? `Total cumulative: ${totalMin} min`
+            : '';
+    }
+
+    function startTimer() {
+        if (timerInterval) return;
+        timerInterval = setInterval(() => {
+            if (pageVisible) {
+                sessionSeconds += 1;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        pageVisible = document.visibilityState === 'visible';
+    });
+
+    window.addEventListener('beforeunload', () => {
+        const prev = lsGet(LS_TOTAL_TIME) ?? 0;
+        lsSet(LS_TOTAL_TIME, prev + sessionSeconds);
+    });
+
+    updateTimerDisplay();
+    startTimer();
+
+    /* ────────────────────────────────────────────
+       3. Collapsible priority cards
+    ──────────────────────────────────────────── */
+    document.querySelectorAll('.priority-header[data-card]').forEach(header => {
+        header.addEventListener('click', () => {
+            const cardId = header.getAttribute('data-card');
+            const card   = document.getElementById(cardId);
+            if (!card) return;
+            card.classList.toggle('collapsed');
+        });
+    });
+
+    /* ────────────────────────────────────────────
+       4. Domain filter tabs
+    ──────────────────────────────────────────── */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.getAttribute('data-filter');
+            applyFilter(filter);
+        });
+    });
+
+    function applyFilter(filter) {
+        const d4Card = document.getElementById('card-d4');
+        const d5Card = document.getElementById('card-d5');
+
+        // Show/hide D4 and D5 info cards based on filter
+        d4Card.style.display = (filter === 'd4' || filter === 'all') ? 'block' : 'none';
+        d5Card.style.display = (filter === 'd5' || filter === 'all') ? 'block' : 'none';
+
+        // Handle main priority cards
+        const priorityCards = document.querySelectorAll('.priority-card[data-domain]');
+        priorityCards.forEach(card => {
+            const domain = card.getAttribute('data-domain');
+            if (filter === 'all') {
+                card.style.display = 'block';
+                card.classList.remove('filter-highlight');
+            } else if (domain === filter) {
+                card.style.display = 'block';
+                // Expand the card if collapsed
+                card.classList.remove('collapsed');
+                // Scroll and highlight
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    card.classList.add('filter-highlight');
+                    setTimeout(() => card.classList.remove('filter-highlight'), 1800);
+                }, 50);
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // For D4/D5 filters also scroll to the info card
+        if (filter === 'd4') {
+            setTimeout(() => {
+                d4Card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        }
+        if (filter === 'd5') {
+            setTimeout(() => {
+                d5Card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        }
+
+        // For D1 overview row highlight
+        if (filter !== 'all') {
+            const overviewRow = document.getElementById(`overview-${filter}`);
+            if (overviewRow) {
+                overviewRow.style.outline = '2px solid var(--accent)';
+                setTimeout(() => overviewRow.style.outline = '', 1800);
+            }
+        }
+    }
+
+    /* ────────────────────────────────────────────
+       5. Animated score bars (domain overview)
+    ──────────────────────────────────────────── */
+    function animateDomainBars() {
+        document.querySelectorAll('.domain-bar-fill[data-target]').forEach(fill => {
+            const target = fill.getAttribute('data-target');
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    fill.style.width = target + '%';
+                });
+            });
+        });
+    }
+
+    /* ────────────────────────────────────────────
+       6. Trajectory bar animation
+    ──────────────────────────────────────────── */
+    function animateTrajBars() {
+        const base = document.getElementById('trajBase');
+        const gain = document.getElementById('trajGain');
+        if (!base || !gain) return;
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                base.style.width = '63%';
+                gain.style.width = '30%';
+            });
+        });
+    }
+
+    /* Trigger animations after a short delay to allow layout */
+    setTimeout(() => {
+        animateDomainBars();
+        animateTrajBars();
+    }, 80);
+
+    /* ────────────────────────────────────────────
+       7. Tooltip on subtopic rows
+    ──────────────────────────────────────────── */
+    const tooltip   = document.getElementById('tooltip');
+    const tooltipQ  = document.getElementById('tooltipQ');
+    const tooltipTx = document.getElementById('tooltipText');
+    let tooltipTimeout = null;
+
+    document.querySelectorAll('.subtopic-row[data-tooltip-q]').forEach(row => {
+        row.addEventListener('mouseenter', (e) => {
+            const q    = row.getAttribute('data-tooltip-q');
+            const text = row.getAttribute('data-tooltip-text');
+            tooltipQ.textContent  = q + ':';
+            tooltipTx.textContent = text;
+            positionTooltip(e);
+            tooltip.classList.add('visible');
+        });
+
+        row.addEventListener('mousemove', positionTooltip);
+
+        row.addEventListener('mouseleave', () => {
+            tooltip.classList.remove('visible');
+        });
+    });
+
+    function positionTooltip(e) {
+        const margin = 14;
+        const tw = tooltip.offsetWidth  || 260;
+        const th = tooltip.offsetHeight || 60;
+        let x = e.clientX + margin;
+        let y = e.clientY + margin;
+
+        if (x + tw > window.innerWidth  - 8) x = e.clientX - tw - margin;
+        if (y + th > window.innerHeight - 8) y = e.clientY - th - margin;
+
+        tooltip.style.left = x + 'px';
+        tooltip.style.top  = y + 'px';
+    }
+
+    /* ────────────────────────────────────────────
+       8. "Mark as studied" checkboxes
+    ──────────────────────────────────────────── */
+    const checklist = lsGet(LS_CHECKLIST) ?? {};
+
+    function updateCompletionCounter() {
+        const allChecks  = document.querySelectorAll('.study-check');
+        const checked    = [...allChecks].filter(c => c.checked).length;
+        document.getElementById('studiedCount').textContent = checked;
+        document.getElementById('totalCount').textContent   = allChecks.length;
+    }
+
+    function applyChecklistState() {
+        document.querySelectorAll('.study-check').forEach(checkbox => {
+            const key = checkbox.getAttribute('data-key');
+            if (checklist[key]) {
+                checkbox.checked = true;
+                checkbox.closest('.subtopic-row').classList.add('studied');
+            }
+        });
+        updateCompletionCounter();
+    }
+
+    document.querySelectorAll('.study-check').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            // Prevent the header click collapse from firing
+            e.stopPropagation();
+            const key = checkbox.getAttribute('data-key');
+            const row = checkbox.closest('.subtopic-row');
+
+            if (checkbox.checked) {
+                checklist[key] = true;
+                row.classList.add('studied');
+            } else {
+                delete checklist[key];
+                row.classList.remove('studied');
+            }
+            lsSet(LS_CHECKLIST, checklist);
+            updateCompletionCounter();
+        });
+
+        // Prevent checkbox clicks from collapsing the card
+        checkbox.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    applyChecklistState();
+
+    /* ────────────────────────────────────────────
+       9. Resource link visit tracking
+    ──────────────────────────────────────────── */
+    const visitedLinks = lsGet(LS_LINKS) ?? {};
+
+    function applyVisitedLinks() {
+        document.querySelectorAll('a[data-link-key]').forEach(link => {
+            const key = link.getAttribute('data-link-key');
+            if (visitedLinks[key]) {
+                link.classList.add('link-visited');
+            }
+        });
+    }
+
+    document.querySelectorAll('a[data-link-key]').forEach(link => {
+        link.addEventListener('click', () => {
+            const key = link.getAttribute('data-link-key');
+            visitedLinks[key] = true;
+            lsSet(LS_LINKS, visitedLinks);
+            link.classList.add('link-visited');
+        });
+    });
+
+    applyVisitedLinks();
+
+})();
+</script>
 </body>
 </html>
