@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pick Your Study Mascot | CCA-F</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface-2: #232734;
+      --border: #2d3142;
+      --text: #e4e4e7;
+      --text-muted: #9ca3af;
+      --accent: #c084fc;
+      --accent-dim: rgba(192, 132, 252, 0.15);
+      --green: #4ade80;
+      --green-dim: rgba(74, 222, 128, 0.15);
+      --amber: #fbbf24;
+      --amber-dim: rgba(251, 191, 36, 0.15);
+      --blue: #60a5fa;
+      --blue-dim: rgba(96, 165, 250, 0.15);
+      --rose: #fb7185;
+      --rose-dim: rgba(251, 113, 133, 0.15);
+      --cyan: #22d3ee;
+      --cyan-dim: rgba(34, 211, 238, 0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      padding: 3rem 2rem 2.5rem;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--blue), var(--cyan));
+    }
+    .header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    .header .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* ── Grid ── */
+    .mascot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 860px) {
+      .mascot-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .mascot-grid { grid-template-columns: 1fr; }
+      .header h1 { font-size: 1.8rem; }
+    }
+
+    /* ── Card ── */
+    .mascot-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem 1.4rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.9rem;
+      cursor: pointer;
+      transition: border-color 0.25s ease, background 0.25s ease, opacity 0.25s ease, transform 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .mascot-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--card-accent, var(--border));
+      transition: background 0.25s ease;
+    }
+    .mascot-card:hover {
+      border-color: var(--card-accent, var(--accent));
+      transform: translateY(-3px);
+      background: var(--surface-2);
+    }
+    .mascot-card.selected {
+      border-color: var(--card-accent, var(--accent));
+      box-shadow: 0 0 0 3px var(--card-glow, rgba(192,132,252,0.25)),
+                  0 8px 32px var(--card-glow, rgba(192,132,252,0.15));
+      background: var(--surface-2);
+    }
+    .mascot-card.selected::before {
+      background: var(--card-accent, var(--accent));
+    }
+    .mascot-card.dimmed {
+      opacity: 0.45;
+    }
+
+    /* ── Pixel stage ── */
+    .pixel-stage {
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0.5rem 0;
+      position: relative;
+    }
+
+    /* The actual pixel-art div.
+       Each mascot element is 1px in CSS; transform:scale(12) = 12px per pixel.
+       box-shadow uses 4px units (1 pixel = 4px CSS px), then scale(3) at render gives 12px. */
+    .pixel-art {
+      image-rendering: pixelated;
+      transform: scale(3);
+      transform-origin: center center;
+    }
+
+    /* Card text */
+    .mascot-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+    .mascot-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+      background: var(--tag-bg, rgba(192,132,252,0.12));
+      color: var(--tag-color, var(--accent));
+      border: 1px solid var(--tag-border, rgba(192,132,252,0.3));
+    }
+    .mascot-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    /* Pick button */
+    .pick-btn {
+      margin-top: 0.4rem;
+      padding: 0.5rem 1.4rem;
+      border-radius: 8px;
+      border: 1.5px solid var(--btn-border, var(--border));
+      background: transparent;
+      color: var(--btn-color, var(--text-muted));
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      font-family: inherit;
+      letter-spacing: 0.02em;
+    }
+    .pick-btn:hover {
+      background: var(--btn-bg, rgba(192,132,252,0.12));
+      border-color: var(--btn-border-hover, var(--accent));
+      color: var(--btn-color-hover, var(--accent));
+      transform: scale(1.04);
+    }
+    .mascot-card.selected .pick-btn {
+      background: var(--card-accent, var(--accent));
+      border-color: var(--card-accent, var(--accent));
+      color: #0f1117;
+    }
+
+    /* ── Confirmation bar ── */
+    .confirm-bar {
+      position: fixed;
+      bottom: -100px;
+      left: 0; right: 0;
+      background: var(--surface-2);
+      border-top: 2px solid var(--accent);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      z-index: 100;
+      transition: bottom 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-wrap: wrap;
+    }
+    .confirm-bar.visible { bottom: 0; }
+    .confirm-bar .confirm-text {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .confirm-bar .confirm-text span {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .confirm-btn {
+      padding: 0.5rem 1.4rem;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #0f1117;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .confirm-btn:hover { opacity: 0.88; transform: scale(1.04); }
+    .cancel-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .cancel-btn:hover { color: var(--rose); border-color: var(--rose); }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      padding: 1.5rem 0 5rem;
+    }
+
+    /* Already-selected banner */
+    .already-selected-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.8rem 1.4rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+    .already-selected-banner.visible { display: block; }
+    .already-selected-banner strong { color: var(--accent); }
+
+
+    /* ════════════════════════════════
+       PIXEL ART MASCOTS
+       Each mascot is a single 1x1 div
+       with all pixels drawn via box-shadow.
+       box-shadow format: x y 0 0 color
+       1 unit = 4px CSS pixels
+    ════════════════════════════════ */
+
+    /* shared pixel size */
+    .px { width: 4px; height: 4px; display: block; position: relative; }
+
+
+    /* ── 1: Claude Classic ── */
+    .claude-classic {
+      width: 4px; height: 4px;
+      background: transparent;
+      box-shadow:
+        /* Row 1 – top of head (cols 3-8 of 12 wide grid) */
+        12px  0px 0 0 #D97706,
+        16px  0px 0 0 #D97706,
+        20px  0px 0 0 #D97706,
+        24px  0px 0 0 #D97706,
+        28px  0px 0 0 #D97706,
+        32px  0px 0 0 #D97706,
+        /* Row 2 */
+        8px   4px 0 0 #D97706,
+        12px  4px 0 0 #D97706,
+        16px  4px 0 0 #D97706,
+        20px  4px 0 0 #D97706,
+        24px  4px 0 0 #D97706,
+        28px  4px 0 0 #D97706,
+        32px  4px 0 0 #D97706,
+        36px  4px 0 0 #D97706,
+        /* Row 3 – eyes */
+        8px   8px 0 0 #D97706,
+        12px  8px 0 0 #1a0a00,  /* left eye */
+        16px  8px 0 0 #1a0a00,
+        20px  8px 0 0 #D97706,
+        24px  8px 0 0 #D97706,
+        28px  8px 0 0 #1a0a00,  /* right eye */
+        32px  8px 0 0 #1a0a00,
+        36px  8px 0 0 #D97706,
+        /* Row 4 – eyes cont */
+        8px  12px 0 0 #D97706,
+        12px 12px 0 0 #1a0a00,
+        16px 12px 0 0 #1a0a00,
+        20px 12px 0 0 #D97706,
+        24px 12px 0 0 #D97706,
+        28px 12px 0 0 #1a0a00,
+        32px 12px 0 0 #1a0a00,
+        36px 12px 0 0 #D97706,
+        /* Row 5 – cheeks */
+        8px  16px 0 0 #D97706,
+        12px 16px 0 0 #D97706,
+        16px 16px 0 0 #D97706,
+        20px 16px 0 0 #D97706,
+        24px 16px 0 0 #D97706,
+        28px 16px 0 0 #D97706,
+        32px 16px 0 0 #D97706,
+        36px 16px 0 0 #D97706,
+        /* Row 6 – smile */
+        8px  20px 0 0 #D97706,
+        12px 20px 0 0 #1a0a00, /* smile left */
+        16px 20px 0 0 #D97706,
+        20px 20px 0 0 #D97706,
+        24px 20px 0 0 #D97706,
+        28px 20px 0 0 #D97706,
+        32px 20px 0 0 #1a0a00, /* smile right */
+        36px 20px 0 0 #D97706,
+        /* Row 7 – smile bottom */
+        8px  24px 0 0 #D97706,
+        12px 24px 0 0 #D97706,
+        16px 24px 0 0 #1a0a00,
+        20px 24px 0 0 #1a0a00,
+        24px 24px 0 0 #1a0a00,
+        28px 24px 0 0 #1a0a00,
+        32px 24px 0 0 #D97706,
+        36px 24px 0 0 #D97706,
+        /* Row 8 – neck/body top */
+        8px  28px 0 0 #D97706,
+        12px 28px 0 0 #D97706,
+        16px 28px 0 0 #D97706,
+        20px 28px 0 0 #D97706,
+        24px 28px 0 0 #D97706,
+        28px 28px 0 0 #D97706,
+        32px 28px 0 0 #D97706,
+        36px 28px 0 0 #D97706,
+        /* Row 9 – body */
+        4px  32px 0 0 #D97706,
+        8px  32px 0 0 #D97706,
+        12px 32px 0 0 #D97706,
+        16px 32px 0 0 #D97706,
+        20px 32px 0 0 #D97706,
+        24px 32px 0 0 #D97706,
+        28px 32px 0 0 #D97706,
+        32px 32px 0 0 #D97706,
+        36px 32px 0 0 #D97706,
+        40px 32px 0 0 #D97706,
+        /* Row 10 – body */
+        4px  36px 0 0 #D97706,
+        8px  36px 0 0 #D97706,
+        12px 36px 0 0 #D97706,
+        16px 36px 0 0 #D97706,
+        20px 36px 0 0 #D97706,
+        24px 36px 0 0 #D97706,
+        28px 36px 0 0 #D97706,
+        32px 36px 0 0 #D97706,
+        36px 36px 0 0 #D97706,
+        40px 36px 0 0 #D97706,
+        /* Row 11 – body */
+        8px  40px 0 0 #D97706,
+        12px 40px 0 0 #D97706,
+        16px 40px 0 0 #D97706,
+        20px 40px 0 0 #D97706,
+        24px 40px 0 0 #D97706,
+        28px 40px 0 0 #D97706,
+        32px 40px 0 0 #D97706,
+        36px 40px 0 0 #D97706,
+        /* Row 12 – feet */
+        12px 44px 0 0 #D97706,
+        16px 44px 0 0 #D97706,
+        28px 44px 0 0 #D97706,
+        32px 44px 0 0 #D97706,
+        /* Row 13 – feet bottom */
+        12px 48px 0 0 #92400e,
+        16px 48px 0 0 #92400e,
+        28px 48px 0 0 #92400e,
+        32px 48px 0 0 #92400e;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ── 2: Study Owl ── */
+    .study-owl {
+      width: 4px; height: 4px;
+      background: transparent;
+      box-shadow:
+        /* Ear tufts row 0 */
+        12px  0px 0 0 #7c3aed,
+        16px  0px 0 0 #7c3aed,
+        28px  0px 0 0 #7c3aed,
+        32px  0px 0 0 #7c3aed,
+        /* Ear tufts row 1 */
+        12px  4px 0 0 #a855f7,
+        16px  4px 0 0 #a855f7,
+        20px  4px 0 0 #c084fc,
+        24px  4px 0 0 #c084fc,
+        28px  4px 0 0 #a855f7,
+        32px  4px 0 0 #a855f7,
+        /* Head row 2 */
+        8px   8px 0 0 #c084fc,
+        12px  8px 0 0 #c084fc,
+        16px  8px 0 0 #c084fc,
+        20px  8px 0 0 #c084fc,
+        24px  8px 0 0 #c084fc,
+        28px  8px 0 0 #c084fc,
+        32px  8px 0 0 #c084fc,
+        36px  8px 0 0 #c084fc,
+        /* Eyes row 3 – big white circles */
+        8px  12px 0 0 #c084fc,
+        12px 12px 0 0 #ffffff,
+        16px 12px 0 0 #ffffff,
+        20px 12px 0 0 #c084fc,
+        24px 12px 0 0 #c084fc,
+        28px 12px 0 0 #ffffff,
+        32px 12px 0 0 #ffffff,
+        36px 12px 0 0 #c084fc,
+        /* Eyes row 4 – pupils */
+        8px  16px 0 0 #c084fc,
+        12px 16px 0 0 #ffffff,
+        16px 16px 0 0 #1a0029, /* pupil */
+        20px 16px 0 0 #c084fc,
+        24px 16px 0 0 #c084fc,
+        28px 16px 0 0 #1a0029,
+        32px 16px 0 0 #ffffff,
+        36px 16px 0 0 #c084fc,
+        /* Eyes row 5 */
+        8px  20px 0 0 #c084fc,
+        12px 20px 0 0 #ffffff,
+        16px 20px 0 0 #ffffff,
+        20px 20px 0 0 #c084fc,
+        24px 20px 0 0 #c084fc,
+        28px 20px 0 0 #ffffff,
+        32px 20px 0 0 #ffffff,
+        36px 20px 0 0 #c084fc,
+        /* Beak row 6 */
+        8px  24px 0 0 #c084fc,
+        12px 24px 0 0 #c084fc,
+        16px 24px 0 0 #c084fc,
+        20px 24px 0 0 #fbbf24, /* beak */
+        24px 24px 0 0 #fbbf24,
+        28px 24px 0 0 #c084fc,
+        32px 24px 0 0 #c084fc,
+        36px 24px 0 0 #c084fc,
+        /* Body row 7 */
+        4px  28px 0 0 #a855f7, /* left wing */
+        8px  28px 0 0 #c084fc,
+        12px 28px 0 0 #c084fc,
+        16px 28px 0 0 #c084fc,
+        20px 28px 0 0 #c084fc,
+        24px 28px 0 0 #c084fc,
+        28px 28px 0 0 #c084fc,
+        32px 28px 0 0 #c084fc,
+        36px 28px 0 0 #c084fc,
+        40px 28px 0 0 #a855f7, /* right wing */
+        /* Body row 8 */
+        4px  32px 0 0 #7c3aed,
+        8px  32px 0 0 #c084fc,
+        12px 32px 0 0 #c084fc,
+        16px 32px 0 0 #e9d5ff,
+        20px 32px 0 0 #e9d5ff,
+        24px 32px 0 0 #e9d5ff,
+        28px 32px 0 0 #e9d5ff,
+        32px 32px 0 0 #c084fc,
+        36px 32px 0 0 #c084fc,
+        40px 32px 0 0 #7c3aed,
+        /* Body row 9 */
+        8px  36px 0 0 #c084fc,
+        12px 36px 0 0 #c084fc,
+        16px 36px 0 0 #e9d5ff,
+        20px 36px 0 0 #e9d5ff,
+        24px 36px 0 0 #e9d5ff,
+        28px 36px 0 0 #e9d5ff,
+        32px 36px 0 0 #c084fc,
+        36px 36px 0 0 #c084fc,
+        /* Body row 10 */
+        8px  40px 0 0 #c084fc,
+        12px 40px 0 0 #c084fc,
+        16px 40px 0 0 #c084fc,
+        20px 40px 0 0 #c084fc,
+        24px 40px 0 0 #c084fc,
+        28px 40px 0 0 #c084fc,
+        32px 40px 0 0 #c084fc,
+        36px 40px 0 0 #c084fc,
+        /* Feet */
+        12px 44px 0 0 #fbbf24,
+        16px 44px 0 0 #fbbf24,
+        20px 44px 0 0 #fbbf24,
+        24px 44px 0 0 #fbbf24,
+        28px 44px 0 0 #fbbf24,
+        32px 44px 0 0 #fbbf24;
+      animation: owlTilt 3s ease-in-out infinite;
+    }
+
+    @keyframes owlTilt {
+      0%, 100%   { transform: rotate(0deg); }
+      20%        { transform: rotate(-8deg); }
+      40%        { transform: rotate(8deg); }
+      60%        { transform: rotate(-4deg); }
+      80%        { transform: rotate(0deg); }
+      /* blink effect via filter brightness trick */
+    }
+
+
+    /* ── 3: Pixel Cat ── */
+    .pixel-cat {
+      width: 4px; height: 4px;
+      background: transparent;
+      box-shadow:
+        /* Ears row 0 */
+        8px   0px 0 0 #22d3ee,
+        12px  0px 0 0 #22d3ee,
+        32px  0px 0 0 #22d3ee,
+        36px  0px 0 0 #22d3ee,
+        /* Ears row 1 */
+        8px   4px 0 0 #22d3ee,
+        12px  4px 0 0 #0e9ab3, /* inner ear dark */
+        16px  4px 0 0 #22d3ee,
+        28px  4px 0 0 #22d3ee,
+        32px  4px 0 0 #0e9ab3,
+        36px  4px 0 0 #22d3ee,
+        /* Head row 2 */
+        8px   8px 0 0 #22d3ee,
+        12px  8px 0 0 #22d3ee,
+        16px  8px 0 0 #22d3ee,
+        20px  8px 0 0 #22d3ee,
+        24px  8px 0 0 #22d3ee,
+        28px  8px 0 0 #22d3ee,
+        32px  8px 0 0 #22d3ee,
+        36px  8px 0 0 #22d3ee,
+        /* Eyes row 3 */
+        8px  12px 0 0 #22d3ee,
+        12px 12px 0 0 #22d3ee,
+        16px 12px 0 0 #1e293b, /* eye */
+        20px 12px 0 0 #22d3ee,
+        24px 12px 0 0 #22d3ee,
+        28px 12px 0 0 #1e293b,
+        32px 12px 0 0 #22d3ee,
+        36px 12px 0 0 #22d3ee,
+        /* Eyes row 4 */
+        8px  16px 0 0 #22d3ee,
+        12px 16px 0 0 #22d3ee,
+        16px 16px 0 0 #1e293b,
+        20px 16px 0 0 #22d3ee,
+        24px 16px 0 0 #22d3ee,
+        28px 16px 0 0 #1e293b,
+        32px 16px 0 0 #22d3ee,
+        36px 16px 0 0 #22d3ee,
+        /* Whiskers + nose row 5 */
+        4px  20px 0 0 #a0f0fa, /* whisker left */
+        8px  20px 0 0 #a0f0fa,
+        12px 20px 0 0 #22d3ee,
+        16px 20px 0 0 #22d3ee,
+        20px 20px 0 0 #fb7185, /* nose */
+        24px 20px 0 0 #22d3ee,
+        28px 20px 0 0 #22d3ee,
+        32px 20px 0 0 #a0f0fa, /* whisker right */
+        36px 20px 0 0 #a0f0fa,
+        /* Mouth row 6 */
+        8px  24px 0 0 #22d3ee,
+        12px 24px 0 0 #22d3ee,
+        16px 24px 0 0 #1e293b,
+        20px 24px 0 0 #22d3ee,
+        24px 24px 0 0 #22d3ee,
+        28px 24px 0 0 #1e293b,
+        32px 24px 0 0 #22d3ee,
+        36px 24px 0 0 #22d3ee,
+        /* Chin row 7 */
+        8px  28px 0 0 #22d3ee,
+        12px 28px 0 0 #22d3ee,
+        16px 28px 0 0 #cffafe, /* belly light */
+        20px 28px 0 0 #cffafe,
+        24px 28px 0 0 #cffafe,
+        28px 28px 0 0 #cffafe,
+        32px 28px 0 0 #22d3ee,
+        36px 28px 0 0 #22d3ee,
+        /* Body row 8 */
+        8px  32px 0 0 #22d3ee,
+        12px 32px 0 0 #22d3ee,
+        16px 32px 0 0 #cffafe,
+        20px 32px 0 0 #cffafe,
+        24px 32px 0 0 #cffafe,
+        28px 32px 0 0 #cffafe,
+        32px 32px 0 0 #22d3ee,
+        36px 32px 0 0 #22d3ee,
+        /* Body row 9 */
+        8px  36px 0 0 #22d3ee,
+        12px 36px 0 0 #22d3ee,
+        16px 36px 0 0 #22d3ee,
+        20px 36px 0 0 #22d3ee,
+        24px 36px 0 0 #22d3ee,
+        28px 36px 0 0 #22d3ee,
+        32px 36px 0 0 #22d3ee,
+        36px 36px 0 0 #22d3ee,
+        /* Tail row 9 (beside body) */
+        40px 32px 0 0 #22d3ee,
+        44px 28px 0 0 #22d3ee,
+        44px 24px 0 0 #22d3ee,
+        40px 20px 0 0 #22d3ee,
+        /* Feet row 10 */
+        12px 40px 0 0 #22d3ee,
+        16px 40px 0 0 #22d3ee,
+        24px 40px 0 0 #22d3ee,
+        28px 40px 0 0 #22d3ee,
+        /* Paws row 11 */
+        12px 44px 0 0 #0e9ab3,
+        16px 44px 0 0 #0e9ab3,
+        24px 44px 0 0 #0e9ab3,
+        28px 44px 0 0 #0e9ab3;
+      animation: catTail 4s ease-in-out infinite;
+    }
+
+    @keyframes catTail {
+      0%, 100% { transform: rotate(0deg) scaleX(1); }
+      30%      { transform: rotate(2deg) scaleX(1); }
+      60%      { transform: rotate(-2deg) scaleX(-1); }
+    }
+
+
+    /* ── 4: Bot Buddy ── */
+    .bot-buddy {
+      width: 4px; height: 4px;
+      background: transparent;
+      box-shadow:
+        /* Antenna */
+        20px  0px 0 0 #9ca3af,
+        20px  4px 0 0 #9ca3af,
+        16px  4px 0 0 #60a5fa, /* antenna light */
+        /* Head */
+        8px   8px 0 0 #6b7280,
+        12px  8px 0 0 #6b7280,
+        16px  8px 0 0 #6b7280,
+        20px  8px 0 0 #6b7280,
+        24px  8px 0 0 #6b7280,
+        28px  8px 0 0 #6b7280,
+        32px  8px 0 0 #6b7280,
+        /* Head row 2 – screen face border */
+        8px  12px 0 0 #6b7280,
+        12px 12px 0 0 #374151,
+        16px 12px 0 0 #374151,
+        20px 12px 0 0 #374151,
+        24px 12px 0 0 #374151,
+        28px 12px 0 0 #374151,
+        32px 12px 0 0 #6b7280,
+        /* Screen row 3 – LED eyes */
+        8px  16px 0 0 #6b7280,
+        12px 16px 0 0 #374151,
+        16px 16px 0 0 #60a5fa, /* LED left */
+        20px 16px 0 0 #374151,
+        24px 16px 0 0 #374151,
+        28px 16px 0 0 #60a5fa, /* LED right */
+        32px 16px 0 0 #374151, /* was #6b7280 */
+        36px 16px 0 0 #6b7280,
+        /* Screen row 4 */
+        8px  20px 0 0 #6b7280,
+        12px 20px 0 0 #374151,
+        16px 20px 0 0 #60a5fa,
+        20px 20px 0 0 #374151,
+        24px 20px 0 0 #374151,
+        28px 20px 0 0 #60a5fa,
+        32px 20px 0 0 #374151,
+        36px 20px 0 0 #6b7280,
+        /* Screen row 5 – smile pixels */
+        8px  24px 0 0 #6b7280,
+        12px 24px 0 0 #374151,
+        16px 24px 0 0 #374151,
+        20px 24px 0 0 #60a5fa, /* smile arc */
+        24px 24px 0 0 #60a5fa,
+        28px 24px 0 0 #374151,
+        32px 24px 0 0 #374151,
+        36px 24px 0 0 #6b7280,
+        /* Screen bottom border */
+        8px  28px 0 0 #6b7280,
+        12px 28px 0 0 #374151,
+        16px 28px 0 0 #374151,
+        20px 28px 0 0 #374151,
+        24px 28px 0 0 #374151,
+        28px 28px 0 0 #374151,
+        32px 28px 0 0 #374151,
+        36px 28px 0 0 #6b7280,
+        /* Neck */
+        16px 32px 0 0 #6b7280,
+        20px 32px 0 0 #6b7280,
+        24px 32px 0 0 #6b7280,
+        28px 32px 0 0 #6b7280,
+        /* Body */
+        8px  36px 0 0 #6b7280,
+        12px 36px 0 0 #6b7280,
+        16px 36px 0 0 #6b7280,
+        20px 36px 0 0 #6b7280,
+        24px 36px 0 0 #6b7280,
+        28px 36px 0 0 #6b7280,
+        32px 36px 0 0 #6b7280,
+        36px 36px 0 0 #6b7280,
+        /* Body row 2 */
+        8px  40px 0 0 #6b7280,
+        12px 40px 0 0 #4b5563,
+        16px 40px 0 0 #60a5fa, /* chest screen */
+        20px 40px 0 0 #60a5fa,
+        24px 40px 0 0 #60a5fa,
+        28px 40px 0 0 #60a5fa,
+        32px 40px 0 0 #4b5563,
+        36px 40px 0 0 #6b7280,
+        /* Legs */
+        12px 44px 0 0 #6b7280,
+        16px 44px 0 0 #6b7280,
+        28px 44px 0 0 #6b7280,
+        32px 44px 0 0 #6b7280,
+        /* Feet */
+        12px 48px 0 0 #4b5563,
+        16px 48px 0 0 #4b5563,
+        20px 48px 0 0 #4b5563,
+        28px 48px 0 0 #4b5563,
+        32px 48px 0 0 #4b5563,
+        36px 48px 0 0 #4b5563;
+      animation: botFloat 2.5s ease-in-out infinite;
+    }
+
+    @keyframes botFloat {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+
+    .bot-antenna-light {
+      /* handled inline for blink via second class */
+    }
+
+    @keyframes antennaBlinkAnim {
+      0%, 80%, 100% { box-shadow: inherit; }
+      85%, 95%      { filter: brightness(3); }
+    }
+
+
+    /* ── 5: Baby Claude ── */
+    .baby-claude {
+      width: 4px; height: 4px;
+      background: transparent;
+      box-shadow:
+        /* Big round head row 0 */
+        12px  0px 0 0 #F59E0B,
+        16px  0px 0 0 #F59E0B,
+        20px  0px 0 0 #F59E0B,
+        24px  0px 0 0 #F59E0B,
+        28px  0px 0 0 #F59E0B,
+        32px  0px 0 0 #F59E0B,
+        /* Row 1 */
+        8px   4px 0 0 #F59E0B,
+        12px  4px 0 0 #F59E0B,
+        16px  4px 0 0 #F59E0B,
+        20px  4px 0 0 #F59E0B,
+        24px  4px 0 0 #F59E0B,
+        28px  4px 0 0 #F59E0B,
+        32px  4px 0 0 #F59E0B,
+        36px  4px 0 0 #F59E0B,
+        /* Row 2 – HUGE eyes start */
+        4px   8px 0 0 #F59E0B,
+        8px   8px 0 0 #F59E0B,
+        12px  8px 0 0 #ffffff, /* left eye whites */
+        16px  8px 0 0 #ffffff,
+        20px  8px 0 0 #ffffff,
+        24px  8px 0 0 #F59E0B,
+        28px  8px 0 0 #ffffff, /* right eye whites */
+        32px  8px 0 0 #ffffff,
+        36px  8px 0 0 #ffffff,
+        40px  8px 0 0 #F59E0B,
+        /* Row 3 */
+        4px  12px 0 0 #F59E0B,
+        8px  12px 0 0 #ffffff,
+        12px 12px 0 0 #ffffff,
+        16px 12px 0 0 #1a0a00, /* pupil */
+        20px 12px 0 0 #ffffff,
+        24px 12px 0 0 #F59E0B,
+        28px 12px 0 0 #ffffff,
+        32px 12px 0 0 #1a0a00,
+        36px 12px 0 0 #ffffff,
+        40px 12px 0 0 #ffffff,
+        44px 12px 0 0 #F59E0B,
+        /* Row 4 – sparkle highlights */
+        4px  16px 0 0 #F59E0B,
+        8px  16px 0 0 #ffffff,
+        12px 16px 0 0 #ffffff,
+        16px 16px 0 0 #ffffff,
+        20px 16px 0 0 #ffffff,
+        24px 16px 0 0 #F59E0B,
+        28px 16px 0 0 #ffffff,
+        32px 16px 0 0 #ffffff,
+        36px 16px 0 0 #ffffff,
+        40px 16px 0 0 #ffffff,
+        44px 16px 0 0 #F59E0B,
+        /* Row 5 – tiny sparkle dot */
+        8px  20px 0 0 #F59E0B,
+        12px 20px 0 0 #ffffff, /* sparkle */
+        16px 20px 0 0 #F59E0B,
+        20px 20px 0 0 #F59E0B,
+        24px 20px 0 0 #F59E0B,
+        28px 20px 0 0 #F59E0B,
+        32px 20px 0 0 #F59E0B,
+        36px 20px 0 0 #ffffff, /* sparkle */
+        40px 20px 0 0 #F59E0B,
+        /* Blush + nose row 6 */
+        4px  24px 0 0 #F59E0B,
+        8px  24px 0 0 #fca5a5, /* blush left */
+        12px 24px 0 0 #fca5a5,
+        16px 24px 0 0 #F59E0B,
+        20px 24px 0 0 #F59E0B,
+        24px 24px 0 0 #1a0a00, /* nose */
+        28px 24px 0 0 #F59E0B,
+        32px 24px 0 0 #F59E0B,
+        36px 24px 0 0 #fca5a5, /* blush right */
+        40px 24px 0 0 #fca5a5,
+        44px 24px 0 0 #F59E0B,
+        /* Smile row 7 */
+        8px  28px 0 0 #F59E0B,
+        12px 28px 0 0 #1a0a00,
+        16px 28px 0 0 #F59E0B,
+        20px 28px 0 0 #F59E0B,
+        24px 28px 0 0 #F59E0B,
+        28px 28px 0 0 #F59E0B,
+        32px 28px 0 0 #1a0a00,
+        36px 28px 0 0 #F59E0B,
+        /* Smile bottom row 8 */
+        8px  32px 0 0 #F59E0B,
+        12px 32px 0 0 #F59E0B,
+        16px 32px 0 0 #1a0a00,
+        20px 32px 0 0 #1a0a00,
+        24px 32px 0 0 #1a0a00,
+        28px 32px 0 0 #1a0a00,
+        32px 32px 0 0 #F59E0B,
+        36px 32px 0 0 #F59E0B,
+        /* Stubby body */
+        8px  36px 0 0 #F59E0B,
+        12px 36px 0 0 #F59E0B,
+        16px 36px 0 0 #F59E0B,
+        20px 36px 0 0 #F59E0B,
+        24px 36px 0 0 #F59E0B,
+        28px 36px 0 0 #F59E0B,
+        32px 36px 0 0 #F59E0B,
+        36px 36px 0 0 #F59E0B,
+        /* Little arms */
+        4px  40px 0 0 #F59E0B,
+        8px  40px 0 0 #F59E0B,
+        12px 40px 0 0 #F59E0B,
+        16px 40px 0 0 #F59E0B,
+        20px 40px 0 0 #F59E0B,
+        24px 40px 0 0 #F59E0B,
+        28px 40px 0 0 #F59E0B,
+        32px 40px 0 0 #F59E0B,
+        36px 40px 0 0 #F59E0B,
+        40px 40px 0 0 #F59E0B,
+        /* Hands */
+        0px  44px 0 0 #F59E0B,
+        4px  44px 0 0 #D97706,
+        36px 44px 0 0 #F59E0B,
+        40px 44px 0 0 #D97706,
+        44px 44px 0 0 #F59E0B;
+      animation: babyWiggle 2s ease-in-out infinite;
+    }
+
+    @keyframes babyWiggle {
+      0%, 100%  { transform: rotate(0deg) scale(1); }
+      25%        { transform: rotate(-6deg) scale(1.04); }
+      75%        { transform: rotate(6deg) scale(1.04); }
+    }
+
+
+    /* ── 6: Code Fox ── */
+    .code-fox {
+      width: 4px; height: 4px;
+      background: transparent;
+      box-shadow:
+        /* Ears row 0 */
+        8px   0px 0 0 #ea580c,
+        12px  0px 0 0 #ea580c,
+        32px  0px 0 0 #ea580c,
+        36px  0px 0 0 #ea580c,
+        /* Inner ears */
+        8px   4px 0 0 #ea580c,
+        12px  4px 0 0 #7c2d12, /* dark inner */
+        16px  4px 0 0 #ea580c,
+        28px  4px 0 0 #ea580c,
+        32px  4px 0 0 #7c2d12,
+        36px  4px 0 0 #ea580c,
+        /* Head row 2 */
+        8px   8px 0 0 #ea580c,
+        12px  8px 0 0 #ea580c,
+        16px  8px 0 0 #ea580c,
+        20px  8px 0 0 #ea580c,
+        24px  8px 0 0 #ea580c,
+        28px  8px 0 0 #ea580c,
+        32px  8px 0 0 #ea580c,
+        36px  8px 0 0 #ea580c,
+        /* Eyes + glasses row 3 */
+        8px  12px 0 0 #ea580c,
+        12px 12px 0 0 #9ca3af, /* glasses frame */
+        16px 12px 0 0 #1e293b, /* eye */
+        20px 12px 0 0 #9ca3af,
+        24px 12px 0 0 #9ca3af,
+        28px 12px 0 0 #1e293b,
+        32px 12px 0 0 #9ca3af,
+        36px 12px 0 0 #ea580c,
+        /* Glasses row 4 */
+        8px  16px 0 0 #ea580c,
+        12px 16px 0 0 #9ca3af,
+        16px 16px 0 0 #9ca3af,
+        20px 16px 0 0 #9ca3af,
+        24px 16px 0 0 #9ca3af,
+        28px 16px 0 0 #9ca3af,
+        32px 16px 0 0 #9ca3af,
+        36px 16px 0 0 #ea580c,
+        /* Snout row 5 – white muzzle */
+        8px  20px 0 0 #ea580c,
+        12px 20px 0 0 #ea580c,
+        16px 20px 0 0 #fef3c7, /* white muzzle */
+        20px 20px 0 0 #fef3c7,
+        24px 20px 0 0 #fef3c7,
+        28px 20px 0 0 #fef3c7,
+        32px 20px 0 0 #ea580c,
+        36px 20px 0 0 #ea580c,
+        /* Nose row 6 */
+        8px  24px 0 0 #ea580c,
+        12px 24px 0 0 #ea580c,
+        16px 24px 0 0 #fef3c7,
+        20px 24px 0 0 #1a0a00, /* nose */
+        24px 24px 0 0 #fef3c7,
+        28px 24px 0 0 #fef3c7,
+        32px 24px 0 0 #ea580c,
+        36px 24px 0 0 #ea580c,
+        /* Body row 7 */
+        4px  28px 0 0 #ea580c,
+        8px  28px 0 0 #ea580c,
+        12px 28px 0 0 #ea580c,
+        16px 28px 0 0 #fef3c7, /* belly */
+        20px 28px 0 0 #fef3c7,
+        24px 28px 0 0 #fef3c7,
+        28px 28px 0 0 #fef3c7,
+        32px 28px 0 0 #ea580c,
+        36px 28px 0 0 #ea580c,
+        40px 28px 0 0 #ea580c,
+        /* Body row 8 */
+        4px  32px 0 0 #ea580c,
+        8px  32px 0 0 #ea580c,
+        12px 32px 0 0 #fef3c7,
+        16px 32px 0 0 #fef3c7,
+        20px 32px 0 0 #fef3c7,
+        24px 32px 0 0 #fef3c7,
+        28px 32px 0 0 #fef3c7,
+        32px 32px 0 0 #ea580c,
+        36px 32px 0 0 #ea580c,
+        40px 32px 0 0 #ea580c,
+        /* Tail row 7-10 */
+        44px 28px 0 0 #ea580c,
+        48px 24px 0 0 #ea580c,
+        52px 20px 0 0 #ea580c,
+        52px 24px 0 0 #ea580c,
+        48px 28px 0 0 #ea580c,
+        /* Tail tip */
+        52px 16px 0 0 #fef3c7,
+        56px 20px 0 0 #fef3c7,
+        /* Legs row 9 */
+        8px  36px 0 0 #ea580c,
+        12px 36px 0 0 #ea580c,
+        16px 36px 0 0 #ea580c,
+        20px 36px 0 0 #ea580c,
+        24px 36px 0 0 #ea580c,
+        28px 36px 0 0 #ea580c,
+        32px 36px 0 0 #ea580c,
+        36px 36px 0 0 #ea580c,
+        /* Feet */
+        12px 40px 0 0 #7c2d12,
+        16px 40px 0 0 #7c2d12,
+        24px 40px 0 0 #7c2d12,
+        28px 40px 0 0 #7c2d12;
+      animation: foxTailWag 3.5s ease-in-out infinite;
+    }
+
+    @keyframes foxTailWag {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25%       { transform: translateY(-3px) rotate(3deg); }
+      75%       { transform: translateY(-3px) rotate(-3deg); }
+    }
+
+    /* ── Glint overlay for fox glasses ── */
+    .fox-glint {
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 4px;
+      animation: glintAnim 3.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes glintAnim {
+      0%, 60%, 100% { opacity: 0; }
+      65%, 75%       { opacity: 1; }
+    }
+
+    /* ── Owl blink overlay ── */
+    .owl-blink {
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 4px;
+      animation: owlBlinkAnim 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes owlBlinkAnim {
+      0%, 70%, 100% { opacity: 0; }
+      75%, 85%       { opacity: 1; }
+    }
+
+    /* ── Bot antenna blink ── */
+    .bot-blink {
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 4px;
+      animation: botBlinkAnim 2.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes botBlinkAnim {
+      0%, 30%, 60%, 100% { opacity: 0; }
+      40%, 50%            { opacity: 1; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <h1>Pick Your Study Mascot!</h1>
+      <p class="subtitle">Choose a companion for your CCA-F journey</p>
+    </header>
+
+    <!-- Already-selected banner (populated by JS) -->
+    <div class="already-selected-banner" id="existingBanner"></div>
+
+    <!-- 6-card grid -->
+    <div class="mascot-grid">
+
+      <!-- Card 1: Claude Classic -->
+      <div class="mascot-card" id="card-claude-classic"
+           style="--card-accent:#D97706; --card-glow:rgba(217,119,6,0.25);
+                  --tag-bg:rgba(217,119,6,0.12); --tag-color:#fbbf24; --tag-border:rgba(217,119,6,0.3);
+                  --btn-bg:rgba(217,119,6,0.12); --btn-border:var(--border); --btn-border-hover:#D97706; --btn-color-hover:#fbbf24;">
+        <div class="pixel-stage">
+          <div class="px claude-classic"></div>
+        </div>
+        <div class="mascot-name">Claude Classic</div>
+        <div class="mascot-tag">Friendly &amp; Reliable</div>
+        <p class="mascot-desc">The original. Warm, steady, always there for you. Like a trusted study buddy who never lets you down.</p>
+        <button class="pick-btn" onclick="selectMascot('claude-classic', 'Claude Classic')">Pick Me!</button>
+      </div>
+
+      <!-- Card 2: Study Owl -->
+      <div class="mascot-card" id="card-study-owl"
+           style="--card-accent:#c084fc; --card-glow:rgba(192,132,252,0.25);
+                  --tag-bg:rgba(192,132,252,0.12); --tag-color:#c084fc; --tag-border:rgba(192,132,252,0.3);
+                  --btn-bg:rgba(192,132,252,0.12); --btn-border:var(--border); --btn-border-hover:#c084fc; --btn-color-hover:#c084fc;">
+        <div class="pixel-stage">
+          <div style="position:relative; width:4px; height:4px;">
+            <div class="px study-owl"></div>
+            <!-- blink overlay: eyelid pixels over eyes -->
+            <div class="owl-blink" style="box-shadow:
+              12px 12px 0 0 #c084fc, 16px 12px 0 0 #c084fc,
+              28px 12px 0 0 #c084fc, 32px 12px 0 0 #c084fc,
+              12px 16px 0 0 #c084fc, 16px 16px 0 0 #c084fc,
+              28px 16px 0 0 #c084fc, 32px 16px 0 0 #c084fc,
+              12px 20px 0 0 #c084fc, 16px 20px 0 0 #c084fc,
+              28px 20px 0 0 #c084fc, 32px 20px 0 0 #c084fc;
+              transform:scale(3); transform-origin:0 0;">
+            </div>
+          </div>
+        </div>
+        <div class="mascot-name">Study Owl</div>
+        <div class="mascot-tag">Wise &amp; Scholarly</div>
+        <p class="mascot-desc">Steeped in knowledge, sharp as a tack. Tilts their head when you get a hard question right.</p>
+        <button class="pick-btn" onclick="selectMascot('study-owl', 'Study Owl')">Pick Me!</button>
+      </div>
+
+      <!-- Card 3: Pixel Cat -->
+      <div class="mascot-card" id="card-pixel-cat"
+           style="--card-accent:#22d3ee; --card-glow:rgba(34,211,238,0.25);
+                  --tag-bg:rgba(34,211,238,0.12); --tag-color:#22d3ee; --tag-border:rgba(34,211,238,0.3);
+                  --btn-bg:rgba(34,211,238,0.12); --btn-border:var(--border); --btn-border-hover:#22d3ee; --btn-color-hover:#22d3ee;">
+        <div class="pixel-stage">
+          <div class="px pixel-cat"></div>
+        </div>
+        <div class="mascot-name">Pixel Cat</div>
+        <div class="mascot-tag">Curious &amp; Playful</div>
+        <p class="mascot-desc">Swats at wrong answers. Purrs when you hit 80%+. Has strong opinions about flashcard formatting.</p>
+        <button class="pick-btn" onclick="selectMascot('pixel-cat', 'Pixel Cat')">Pick Me!</button>
+      </div>
+
+      <!-- Card 4: Bot Buddy -->
+      <div class="mascot-card" id="card-bot-buddy"
+           style="--card-accent:#60a5fa; --card-glow:rgba(96,165,250,0.25);
+                  --tag-bg:rgba(96,165,250,0.12); --tag-color:#60a5fa; --tag-border:rgba(96,165,250,0.3);
+                  --btn-bg:rgba(96,165,250,0.12); --btn-border:var(--border); --btn-border-hover:#60a5fa; --btn-color-hover:#60a5fa;">
+        <div class="pixel-stage">
+          <div style="position:relative; width:4px; height:4px;">
+            <div class="px bot-buddy"></div>
+            <!-- antenna blink overlay -->
+            <div class="bot-blink" style="box-shadow:
+              16px 4px 0 0 #ffffff;
+              transform:scale(3); transform-origin:0 0;">
+            </div>
+          </div>
+        </div>
+        <div class="mascot-name">Bot Buddy</div>
+        <div class="mascot-tag">Techy &amp; Helpful</div>
+        <p class="mascot-desc">Runs diagnostics on your weak spots. Antenna blinks when a concept clicks. Optimal at all times.</p>
+        <button class="pick-btn" onclick="selectMascot('bot-buddy', 'Bot Buddy')">Pick Me!</button>
+      </div>
+
+      <!-- Card 5: Baby Claude -->
+      <div class="mascot-card" id="card-baby-claude"
+           style="--card-accent:#F59E0B; --card-glow:rgba(245,158,11,0.25);
+                  --tag-bg:rgba(245,158,11,0.12); --tag-color:#fbbf24; --tag-border:rgba(245,158,11,0.3);
+                  --btn-bg:rgba(245,158,11,0.12); --btn-border:var(--border); --btn-border-hover:#F59E0B; --btn-color-hover:#fbbf24;">
+        <div class="pixel-stage">
+          <div class="px baby-claude"></div>
+        </div>
+        <div class="mascot-name">Baby Claude</div>
+        <div class="mascot-tag">Enthusiastic &amp; Adorable</div>
+        <p class="mascot-desc">Maximum enthusiasm at all times. Wiggles with excitement on every correct answer. Big sparkle eyes.</p>
+        <button class="pick-btn" onclick="selectMascot('baby-claude', 'Baby Claude')">Pick Me!</button>
+      </div>
+
+      <!-- Card 6: Code Fox -->
+      <div class="mascot-card" id="card-code-fox"
+           style="--card-accent:#ea580c; --card-glow:rgba(234,88,12,0.25);
+                  --tag-bg:rgba(234,88,12,0.12); --tag-color:#fb923c; --tag-border:rgba(234,88,12,0.3);
+                  --btn-bg:rgba(234,88,12,0.12); --btn-border:var(--border); --btn-border-hover:#ea580c; --btn-color-hover:#fb923c;">
+        <div class="pixel-stage">
+          <div style="position:relative; width:4px; height:4px;">
+            <div class="px code-fox"></div>
+            <!-- glasses glint overlay -->
+            <div class="fox-glint" style="box-shadow:
+              12px 12px 0 0 #ffffff, 28px 12px 0 0 #ffffff;
+              transform:scale(3); transform-origin:0 0;">
+            </div>
+          </div>
+        </div>
+        <div class="mascot-name">Code Fox</div>
+        <div class="mascot-tag">Clever &amp; Studious</div>
+        <p class="mascot-desc">Reads the documentation before you even ask. Glasses glint when they spot a tricky exam trap.</p>
+        <button class="pick-btn" onclick="selectMascot('code-fox', 'Code Fox')">Pick Me!</button>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      Your mascot will appear across all CCA-F study pages
+    </footer>
+
+  </div>
+
+  <!-- Confirmation bar -->
+  <div class="confirm-bar" id="confirmBar">
+    <div class="confirm-text">You picked <span id="confirmName"></span>!</div>
+    <button class="confirm-btn" onclick="confirmChoice()">Confirm Choice</button>
+    <button class="cancel-btn" onclick="cancelChoice()">Cancel</button>
+  </div>
+
+  <script>
+    'use strict';
+
+    const STORAGE_KEY = 'ccaf-mascot-choice';
+
+    /** @type {string|null} The mascot id currently highlighted (not yet confirmed) */
+    let pendingId = null;
+
+    /** @type {string|null} The currently confirmed mascot id */
+    let confirmedId = null;
+
+    /**
+     * Initialise page state from localStorage.
+     */
+    function init() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const { id, name } = JSON.parse(saved);
+        confirmedId = id;
+        applySelection(id);
+        const banner = document.getElementById('existingBanner');
+        banner.innerHTML = `Your current mascot is <strong>${name}</strong>. Pick a new one below to change it.`;
+        banner.classList.add('visible');
+      }
+    }
+
+    /**
+     * Called when a "Pick Me!" button is clicked.
+     * @param {string} id - The mascot card id suffix.
+     * @param {string} name - The display name.
+     */
+    function selectMascot(id, name) {
+      pendingId = id;
+
+      // Update card visuals
+      applySelection(id);
+
+      // Show confirmation bar
+      document.getElementById('confirmName').textContent = name;
+      document.getElementById('confirmBar').classList.add('visible');
+    }
+
+    /**
+     * Apply selected/dimmed classes to all cards for the given id.
+     * @param {string} id
+     */
+    function applySelection(id) {
+      document.querySelectorAll('.mascot-card').forEach(card => {
+        const cardId = card.id.replace('card-', '');
+        if (cardId === id) {
+          card.classList.add('selected');
+          card.classList.remove('dimmed');
+          card.querySelector('.pick-btn').textContent = 'Selected!';
+        } else {
+          card.classList.remove('selected');
+          card.classList.add('dimmed');
+          card.querySelector('.pick-btn').textContent = 'Pick Me!';
+        }
+      });
+    }
+
+    /**
+     * Confirm the pending selection and persist to localStorage.
+     */
+    function confirmChoice() {
+      if (!pendingId) return;
+
+      const card = document.getElementById(`card-${pendingId}`);
+      const name = card.querySelector('.mascot-name').textContent;
+
+      confirmedId = pendingId;
+      pendingId = null;
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ id: confirmedId, name }));
+
+      // Update banner
+      const banner = document.getElementById('existingBanner');
+      banner.innerHTML = `Your mascot is now <strong>${name}</strong>! Great choice.`;
+      banner.classList.add('visible');
+
+      // Hide bar
+      document.getElementById('confirmBar').classList.remove('visible');
+    }
+
+    /**
+     * Cancel the pending selection, reverting to confirmed state (or none).
+     */
+    function cancelChoice() {
+      pendingId = null;
+      document.getElementById('confirmBar').classList.remove('visible');
+
+      if (confirmedId) {
+        applySelection(confirmedId);
+      } else {
+        // Clear all selection state
+        document.querySelectorAll('.mascot-card').forEach(card => {
+          card.classList.remove('selected', 'dimmed');
+          card.querySelector('.pick-btn').textContent = 'Pick Me!';
+        });
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
