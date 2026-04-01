@@ -1092,8 +1092,9 @@ function renderQuestions() {
             <div class="question-text">${q.question}</div>
             <div class="options">${optionsHtml}</div>
             <div class="explanation ${answered[q.id] !== undefined ? 'show' : ''}" id="exp-${q.id}">
-                <div class="exp-title">
-                    ${answered[q.id] !== undefined ? (answered[q.id] === q.correct ? '<span style="color:var(--green)">&#10003; Correct</span>' : '<span style="color:var(--rose)">&#10007; Incorrect — Answer: ' + letters[q.correct] + '</span>') : ''}
+                <div class="exp-title" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>${answered[q.id] !== undefined ? (answered[q.id] === q.correct ? '<span style="color:var(--green)">&#10003; Correct</span>' : '<span style="color:var(--rose)">&#10007; Incorrect — Answer: ' + letters[q.correct] + '</span>') : ''}</span>
+                    ${answered[q.id] !== undefined && answered[q.id] !== -1 ? '<button onclick="event.stopPropagation();undoAnswer('+q.id+')" style="font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:4px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);cursor:pointer;">Undo</button>' : ''}
                 </div>
                 <div>${q.explanation}</div>
                 <div class="personal-note"><strong>Your context:</strong> ${q.personalNote}</div>
@@ -1110,6 +1111,53 @@ function selectAnswer(qId, optIdx) {
     updateScore();
     const el = document.getElementById(`q-${qId}`);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function undoAnswer(qId) {
+    delete answered[qId];
+    renderQuestions();
+    updateScore();
+    const el = document.getElementById(`q-${qId}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Fix a specific question in the most recent saved attempt
+function fixAttemptAnswer(questionId, newAnswerIdx) {
+    const history = getHistory();
+    if (history.length === 0) { alert('No saved attempts to fix.'); return; }
+    const latest = history[history.length - 1];
+    const q = questions.find(q => q.id === questionId);
+    if (!q) { alert('Question not found.'); return; }
+
+    const wasCorrect = (latest.wrongQuestions || []).some(wq => wq.id === questionId);
+    const isNowCorrect = newAnswerIdx === q.correct;
+
+    if (wasCorrect && isNowCorrect) {
+        // Remove from wrong questions
+        latest.wrongQuestions = latest.wrongQuestions.filter(wq => wq.id !== questionId);
+        latest.correct++;
+        latest.wrong--;
+    } else if (!wasCorrect && !isNowCorrect) {
+        // Was correct, now wrong
+        latest.wrongQuestions.push({ id: q.id, domain: q.domain, question: q.question.substring(0,80)+'...' });
+        latest.correct--;
+        latest.wrong++;
+    }
+
+    latest.percent = Math.round(latest.correct / latest.questionsAnswered * 100);
+    latest.label = latest.label + ' (Q' + questionId + ' corrected)';
+
+    // Recalculate domain scores
+    // We need to flip the specific domain
+    if (wasCorrect && isNowCorrect) {
+        latest.domainScores[q.domain].correct++;
+    } else if (!wasCorrect && !isNowCorrect) {
+        latest.domainScores[q.domain].correct--;
+    }
+
+    saveHistory(history);
+    alert('Q' + questionId + ' corrected in attempt #' + latest.id + '. New score: ' + latest.percent + '%');
+    renderHistory();
 }
 
 function updateScore() {
